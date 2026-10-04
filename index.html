@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Connect — პლატფორმა, სადაც ორგანიზაციები ერთმანეთს პოულობენ საერთო პროდუქტის შესაქმნელად.">
+</head>
+<body>
+<title>Connect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wdth,wght@62.5..100,300..900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: app shell — sticky bar with the cup-in-orbit mark, one working view below; the map and the network motif carry the Connect Coffee look */
+:root{
+  --bg:#f4f6f9; --surface:#ffffff; --sunk:#eaeef3; --ink:#18212d; --muted:#5a6677; --line:#d9e0e8;
+  --blue:#2c62d0; --primary:#1e3a66; --orange:#b9802f; --green:#2f8566; --coffee:#4a5868; --river:#d3e0f5; --slate:#7a8797;
+  --s-travel:#c47a3f; --s-edu:#2c62d0; --s-life:#8a7458; --s-biz:#5960c8; --s-culture:#a8508a; --s-social:#2f8566; --s-health:#22808f; --s-eco:#6a8a3a;
+  --shadow:0 1px 2px rgba(20,35,60,.06),0 8px 24px rgba(20,35,60,.07);
+  --f-display:"Noto Sans Georgian","Noto Sans","Segoe UI",system-ui,sans-serif;
+  --f-body:"Noto Sans Georgian","Noto Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f141b; --surface:#171e28; --sunk:#131922; --ink:#e7ecf2; --muted:#9ba7b6; --line:#2a3442;
+  --blue:#6f9bff; --primary:#3f6fd8; --orange:#e0a85c; --green:#5cc09a; --coffee:#aab6c4; --river:#1d2d47; --slate:#8794a5;
+  --s-travel:#e5a06a; --s-edu:#6f9bff; --s-life:#c4ab8a; --s-biz:#9a9ff0; --s-culture:#d98abd; --s-social:#5cc09a; --s-health:#5cc3cf; --s-eco:#a7c473;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0f141b; --surface:#171e28; --sunk:#131922; --ink:#e7ecf2; --muted:#9ba7b6; --line:#2a3442;
+  --blue:#6f9bff; --primary:#3f6fd8; --orange:#e0a85c; --green:#5cc09a; --coffee:#aab6c4; --river:#1d2d47; --slate:#8794a5;
+  --s-travel:#e5a06a; --s-edu:#6f9bff; --s-life:#c4ab8a; --s-biz:#9a9ff0; --s-culture:#d98abd; --s-social:#5cc09a; --s-health:#5cc3cf; --s-eco:#a7c473;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark;}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-stretch:75%;font-variation-settings:"wdth" 75;line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(2rem,5vw,3.3rem);font-weight:850}
+h2{font-size:clamp(1.4rem,2.6vw,1.85rem);font-weight:800}
+h3{font-size:1.12rem;font-weight:750}
+p{margin:0}
+.eyebrow,.label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
+
+/* shell */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1200px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;cursor:pointer}
+.brand b{font-family:var(--f-display);font-stretch:75%;font-variation-settings:"wdth" 75;font-weight:850;font-size:1.35rem;letter-spacing:.01em}
+nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+nav::-webkit-scrollbar{display:none}
+nav button{border:0;background:none;padding:8px 12px;border-radius:999px;white-space:nowrap;cursor:pointer;color:var(--muted);font-weight:550}
+nav button:hover{color:var(--ink);background:var(--sunk)}
+nav button[aria-current="page"]{background:var(--ink);color:var(--bg)}
+main{max-width:1200px;margin:0 auto;padding-inline:16px;padding-block:28px 64px}
+@media (min-width:720px){main{padding-inline:24px}}
+.view{display:grid;gap:40px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.section-head p{color:var(--muted);max-width:62ch}
+
+/* controls */
+.btn{border:1px solid var(--line);background:var(--surface);padding:9px 16px;border-radius:999px;cursor:pointer;font-weight:600;transition:transform .12s,background .12s}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn.blue{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.ghost{background:none}
+.btn.sm{padding:6px 12px;font-size:.86rem}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.link{background:none;border:0;padding:0;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.link:hover{color:var(--blue)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:.8rem;background:color-mix(in srgb,var(--c,var(--muted)) 13%,transparent);color:var(--ink);white-space:nowrap}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c,var(--muted))}
+.tag{display:inline-block;padding:2px 9px;border-radius:6px;font-size:.8rem;border:1px solid var(--line);background:var(--surface)}
+.tag.have{border-color:color-mix(in srgb,var(--green) 55%,var(--line));background:color-mix(in srgb,var(--green) 14%,var(--surface))}
+.tag.need{border-color:color-mix(in srgb,var(--orange) 55%,var(--line));background:color-mix(in srgb,var(--orange) 16%,var(--surface))}
+.tag.hit{background:color-mix(in srgb,var(--blue) 18%,var(--surface));border-color:var(--blue)}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;cursor:pointer;font-size:.85rem;display:inline-flex;align-items:center;gap:6px}
+.fchip::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c,var(--muted))}
+.fchip[aria-pressed="true"]{background:color-mix(in srgb,var(--c,var(--ink)) 16%,var(--surface));border-color:var(--c,var(--ink))}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface)}
+.seg button{border:0;background:none;padding:5px 12px;border-radius:999px;cursor:pointer;font-size:.85rem}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+input[type=text],input[type=search],select,textarea{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px}
+textarea{resize:vertical;min-height:90px}
+label.f{display:grid;gap:6px;font-weight:600;font-size:.9rem}
+label.f small{font-weight:400;color:var(--muted)}
+
+/* hero */
+.hero{display:grid;gap:28px;align-items:center}
+@media (min-width:880px){.hero{grid-template-columns:1.1fr .9fr}}
+.hero-text{display:grid;gap:18px}
+.hero .lead{font-size:1.08rem;color:var(--muted);max-width:56ch}
+.hero .meta{font-size:.86rem;color:var(--muted)}
+.hero-art{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:8px;box-shadow:var(--shadow)}
+.hero-art svg{display:block;width:100%;height:auto}
+.orbit{transform-origin:200px 200px;animation:spin 60s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.orbit{animation:none}.btn:hover{transform:none}}
+
+.steps{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));counter-reset:s}
+.step{border-top:3px solid var(--c);padding-top:12px;display:grid;gap:6px}
+.step .n{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.step p{color:var(--muted);font-size:.92rem}
+
+/* cards */
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px;align-content:start;min-width:0}
+.card .sub{display:flex;gap:6px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:.85rem}
+.card .desc{color:var(--muted);font-size:.92rem}
+.kv{display:grid;gap:6px}
+.kv .tags{display:flex;gap:5px;flex-wrap:wrap}
+.card .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.idea{background:var(--sunk);border-radius:12px;padding:12px 14px;display:grid;gap:4px}
+.idea p{font-size:.9rem;color:var(--muted)}
+.sug header{display:flex;gap:14px;align-items:center}
+.pct{flex:none;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-mono);font-weight:600;font-size:.95rem;background:conic-gradient(var(--blue) calc(var(--p)*1%),var(--sunk) 0);position:relative}
+.pct span{position:relative;z-index:1;background:var(--surface);width:46px;height:46px;border-radius:50%;display:grid;place-items:center}
+.why{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:.9rem}
+.why li{display:flex;gap:8px}
+.why li::before{content:"";flex:none;width:6px;height:6px;margin-top:.55em;border-radius:50%;background:var(--green)}
+.badge{font-size:.72rem;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--ink)}
+.empty{border:1px dashed var(--line);border-radius:16px;padding:24px;color:var(--muted);text-align:center}
+
+.split{display:grid;gap:16px}
+@media (min-width:860px){.split{grid-template-columns:1fr 1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;display:grid;gap:14px;align-content:start}
+.panel.coffee{background:color-mix(in srgb,var(--blue) 6%,var(--surface))}
+.qr-row{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.qr-row svg{flex:none}
+
+/* map */
+.map-wrap{display:grid;gap:16px}
+@media (min-width:980px){.map-wrap{grid-template-columns:minmax(0,1fr) 340px}}
+.map-box{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.map-box svg{display:block;width:100%;height:auto;touch-action:manipulation}
+.map-tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.layers{display:flex;gap:12px;flex-wrap:wrap;font-size:.85rem}
+.layers label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.pin{cursor:pointer}
+.pin:hover circle.dot,.pin:focus circle.dot{stroke-width:4}
+.side{display:grid;gap:10px;align-content:start;max-height:640px;overflow:auto;padding-right:2px}
+.near{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;width:100%}
+.near:hover{border-color:var(--blue)}
+.near .d{margin-left:auto;font-family:var(--f-mono);font-size:.8rem;color:var(--muted);white-space:nowrap}
+.near .dot{width:10px;height:10px;border-radius:50%;background:var(--c);flex:none}
+.near div{min-width:0}
+.near small{color:var(--muted)}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.lg{display:inline-flex;align-items:center;gap:7px;padding:5px 12px 5px 8px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:.84rem;white-space:nowrap}
+.lg svg{flex:none}
+.lg small{color:var(--muted)}
+/* profile */
+.prof{display:grid;gap:20px}
+@media (min-width:980px){.prof{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}}
+.form{display:grid;gap:16px}
+.form .two{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.toggles{display:flex;gap:6px;flex-wrap:wrap}
+.toggles button{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:.84rem}
+.toggles.have button[aria-pressed="true"]{background:color-mix(in srgb,var(--green) 18%,var(--surface));border-color:var(--green)}
+.toggles.need button[aria-pressed="true"]{background:color-mix(in srgb,var(--orange) 18%,var(--surface));border-color:var(--orange)}
+.sticky{position:sticky;top:80px}
+
+/* vision page */
+.vp{background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.vp-head{padding:22px;display:flex;gap:18px;justify-content:space-between;align-items:flex-start;background:linear-gradient(120deg,color-mix(in srgb,var(--c) 14%,var(--surface)),var(--surface) 70%);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.vp-head .who{display:grid;gap:8px;min-width:0;flex:1 1 240px}
+.vp-body{padding:22px;display:grid;gap:18px}
+.vp-body section{display:grid;gap:6px}
+.vp-body .tags{display:flex;gap:5px;flex-wrap:wrap}
+.verified{font-size:.78rem;color:var(--green);font-weight:600}
+
+/* contexts */
+.bar-prog{height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.bar-prog i{display:block;height:100%;background:var(--green);border-radius:99px}
+
+/* modal + toast */
+.overlay{position:fixed;inset:0;background:rgba(12,20,32,.5);display:grid;place-items:center;padding:16px;z-index:50}
+.modal{background:var(--bg);border-radius:20px;width:min(720px,100%);max-height:calc(100% - 24px);overflow:auto;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:1}
+.modal-body{padding:20px;display:grid;gap:16px}
+.x{border:0;background:var(--sunk);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1.1rem;flex:none}
+.slots{display:flex;gap:6px;flex-wrap:wrap}
+.slots button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 10px;cursor:pointer;font-size:.85rem}
+.slots button[aria-pressed="true"]{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 14%,var(--surface))}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;z-index:60;font-size:.9rem;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+.demo{font-size:.8rem;color:var(--muted);text-align:center;padding-top:8px}
+.conn{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line)}
+.conn:first-child{border-top:0}
+.status{font-size:.75rem;padding:2px 9px;border-radius:999px;background:color-mix(in srgb,var(--blue) 14%,transparent)}
+.status.coffee{background:color-mix(in srgb,var(--coffee) 18%,transparent)}
+.status.idea{background:color-mix(in srgb,var(--orange) 16%,transparent)}
+.results-why{font-size:.84rem;color:var(--muted)}
+
+/* cup */
+.cup-wrap{display:grid;gap:24px;align-items:start}
+@media (min-width:900px){.cup-wrap{grid-template-columns:minmax(0,1fr) 330px}}
+.cup-stage{background:var(--sunk);border-radius:22px;padding:24px;display:grid;gap:18px;justify-items:center}
+.cup{position:relative;width:min(320px,80vw);aspect-ratio:240/300;max-width:100%}
+.cup > svg{position:absolute;inset:0;width:100%;height:100%}
+.sleeve .q svg{display:block}
+.sleeve{position:absolute;left:17%;right:17%;top:38.5%;height:33%;display:flex;gap:10px;align-items:center;color:#fff}
+.sleeve .t{display:grid;gap:3px;min-width:0;font-size:.74rem;line-height:1.25}
+.sleeve .t span:last-child{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sleeve .t b{font-size:.92rem;line-height:1.2}
+.sleeve .q{flex:none;position:relative;border-radius:6px;overflow:hidden}
+.scanline{position:absolute;left:0;right:0;height:3px;background:var(--blue);box-shadow:0 0 10px var(--blue);animation:scan .9s ease-in-out 1}
+@keyframes scan{from{top:0}to{top:100%}}
+.cup-ctrl{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.phone{border:10px solid var(--ink);border-radius:36px;background:var(--bg);min-height:520px;padding:18px 16px;display:grid;gap:14px;align-content:start;box-shadow:var(--shadow)}
+.phone .notch{width:80px;height:6px;border-radius:9px;background:var(--line);justify-self:center}
+.phone .ph-empty{display:grid;gap:10px;place-items:center;text-align:center;color:var(--muted);padding-top:120px}
+.here{display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.here:first-child{border-top:0}
+.here .dot{width:10px;height:10px;border-radius:50%;background:var(--c);flex:none}
+.here div{min-width:0;flex:1}
+.here small{color:var(--muted)}
+.roles{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.role{display:grid;gap:8px;align-content:start}
+.role svg{width:56px;height:56px}
+.role p{color:var(--muted);font-size:.93rem}
+</style>
+
+<header class="bar">
+  <div class="bar-in">
+    <button class="brand" data-act="nav" data-v="home" aria-label="Connect — მთავარი">
+      <svg width="36" height="36" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="17" fill="none" stroke="var(--blue)" stroke-width="2.4"/>
+        <path d="M6 13 A17 17 0 0 1 27 4" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M24 2.6 L27.6 4.2 L25 7.2" fill="none" stroke="var(--primary)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="34.5" cy="27" r="2.6" fill="var(--slate)"/><circle cx="5.5" cy="27" r="2.6" fill="var(--blue)"/>
+        <path d="M13 16 h12 l-1.4 10.5 a2 2 0 0 1 -2 1.7 h-5.2 a2 2 0 0 1 -2 -1.7 z" fill="var(--coffee)"/>
+        <path d="M25 18.5 h1.6 a2.6 2.6 0 0 1 0 5.2 h-2.1" fill="none" stroke="var(--coffee)" stroke-width="1.6"/>
+      </svg>
+      <b>Connect</b>
+    </button>
+    <nav id="nav" aria-label="გვერდები"></nav>
+  </div>
+</header>
+<main id="view" class="view"></main>
+<div id="layer"></div>
+
+<script>
+const SPH = {
+  travel:{n:'მოგზაურობა',c:'var(--s-travel)'},
+  edu:{n:'განათლება',c:'var(--s-edu)'},
+  life:{n:'ყოფა და უბანი',c:'var(--s-life)'},
+  biz:{n:'ბიზნესი',c:'var(--s-biz)'},
+  culture:{n:'კულტურა',c:'var(--s-culture)'},
+  social:{n:'სოციალური',c:'var(--s-social)'},
+  health:{n:'ჯანმრთელობა და სპორტი',c:'var(--s-health)'},
+  eco:{n:'ეკოლოგია',c:'var(--s-eco)'}
+};
+const HOODS = {
+  'ნაძალადევი':[430,92],'დიდუბე':[300,48],'მარჯანიშვილი':[492,196],'ჩუღურეთი':[572,262],'ისანი':[792,322],'ავლაბარი':[682,404],
+  'საბურთალო':[180,292],'ვერა':[410,330],'ვაკე':[300,430],'მთაწმინდა':[432,500],'სოლოლაკი':[530,512],'ძველი თბილისი':[602,446]
+};
+const TAGS = ['სივრცე','დარბაზი','აუდიტორია','სტუმრები','ბავშვები','მოსწავლეები','სტუდენტები','გიდი','ტრანსპორტი','კვება','ადგილობრივი პროდუქტი','ექსპონატები','ექსპერტიზა','კვლევა','მოხალისეები','დაფინანსება','დიზაინი','მარკეტინგი','ბუნება','ხელობა','ღონისძიება','ფსიქოლოგი','სპორტი','გადამუშავება','ნარჩენები','ტექნოლოგია'];
+const FORMATS = ['ერთჯერადი ღონისძიება','ერთობლივი პროდუქტი','გრძელვადიანი პროექტი','საგრანტო კონსორციუმი'];
+const COFFEES = [{name:'Connect Coffee · ვერა',x:452,y:300},{name:'Connect Coffee · ავლაბარი',x:650,y:372}];
+
+const ORGS = [
+ {id:'o1',name:'სასტუმრო „ფანჯარა“',type:'ბუტიკ-სასტუმრო',spheres:['travel'],hood:'ძველი თბილისი',x:612,y:430,
+  does:'14-ოთახიანი სასტუმრო ძველ უბანში; სტუმრების ნახევარი პირველად არის საქართველოში.',
+  vision:'გვინდა სტუმარი ქალაქს ადგილობრივივით გაიცნობდეს და არა მხოლოდ ტურისტულ ქუჩებს.',
+  haves:['სტუმრები','სივრცე'],needs:['გიდი','ადგილობრივი პროდუქტი','ღონისძიება'],
+  ideas:[{t:'„ერთი საღამო ძველ თბილისში“',need:'გიდი და მარანი საღამოს პროგრამისთვის'}],formats:['ერთობლივი პროდუქტი','გრძელვადიანი პროექტი'],hidden:'ლობი სამშაბათობით 18:00–21:00'},
+ {id:'o2',name:'მარანი „ქვევრის სახლი“',type:'საოჯახო მარანი',spheres:['biz','travel'],hood:'სოლოლაკი',x:540,y:524,
+  does:'ქვევრის ღვინო და დეგუსტაციები 20 სტუმრამდე ჯგუფებისთვის.',
+  vision:'ქვევრის კულტურა ყოველდღიური გამოცდილება უნდა იყოს, არა მუზეუმის ექსპონატი.',
+  haves:['ადგილობრივი პროდუქტი','ექსპერტიზა','სივრცე'],needs:['სტუმრები','მარკეტინგი'],
+  ideas:[{t:'ქვევრის ოსტატობის დღე',need:'სასტუმროები და ტურ-ოპერატორები'}],formats:['ერთობლივი პროდუქტი']},
+ {id:'o3',name:'გიდების კოოპერატივი „ბილიკი“',type:'კოოპერატივი',spheres:['travel','eco'],hood:'ვერა',x:396,y:350,
+  does:'ქალაქის და ბუნების ექსკურსიები; 9 სერტიფიცირებული გიდი, საკუთარი მიკროავტობუსი.',
+  vision:'ბუნება ქალაქიდან 40 წუთშია — გვინდა ეს ყველამ იცოდეს, განსაკუთრებით ბავშვებმა.',
+  haves:['გიდი','ბუნება','ტრანსპორტი'],needs:['სტუმრები','მოსწავლეები','მარკეტინგი'],
+  ideas:[{t:'სასკოლო ბუნების ბილიკები',need:'სკოლები და მასწავლებლები'}],formats:['გრძელვადიანი პროექტი','ერთჯერადი ღონისძიება']},
+ {id:'o4',name:'სკოლა „ახალი ფურცელი“',type:'კერძო სკოლა',spheres:['edu'],hood:'ვაკე',x:286,y:452,
+  does:'I–XII კლასები, 420 მოსწავლე; პროექტზე დაფუძნებული სწავლება.',
+  vision:'სწავლა საკლასო ოთახს გარეთაც უნდა ხდებოდეს — ქალაქი ჩვენი მეორე სახელმძღვანელოა.',
+  haves:['დარბაზი','მოსწავლეები','სივრცე'],needs:['ექსპონატები','ბუნება','ექსპერტიზა','ფსიქოლოგი'],
+  ideas:[{t:'ქალაქი, როგორც საკლასო ოთახი',need:'მუზეუმები, გიდები, სახელოსნოები'}],formats:['გრძელვადიანი პროექტი','საგრანტო კონსორციუმი'],hidden:'სააქტო დარბაზი (120 ადგილი) შაბათობით'},
+ {id:'o5',name:'საბავშვო ბაღი „მზესუმზირა“',type:'საბავშვო ბაღი',spheres:['edu'],hood:'საბურთალო',x:168,y:316,
+  does:'3–6 წლის 60 ბავშვი, ოთხი ჯგუფი, საკუთარი ეზო.',
+  vision:'ბავშვი სამყაროს ხელით, ხმით და მოძრაობით სწავლობს.',
+  haves:['ბავშვები'],needs:['ბუნება','ხელობა','ფსიქოლოგი'],
+  ideas:[{t:'პატარა ოსტატები',need:'ხელოსნები, სახელოსნოები'}],formats:['ერთჯერადი ღონისძიება','გრძელვადიანი პროექტი']},
+ {id:'o6',name:'სტუდენტური ლაბორატორია „ცნობისმოყვარეობა“',type:'უნივერსიტეტის ლაბორატორია',spheres:['edu'],hood:'ვაკე',x:262,y:398,
+  does:'ფსიქოლოგიისა და განათლების სტუდენტების კვლევითი ჯგუფი, 25 წევრი.',
+  vision:'კვლევა უნდა ეხმარებოდეს სკოლას და თემს, არ უნდა რჩებოდეს თაროზე.',
+  haves:['სტუდენტები','კვლევა','ექსპერტიზა'],needs:['მოსწავლეები','სივრცე','დაფინანსება'],
+  ideas:[{t:'მოსწავლეთა კვლევითი ზაფხულის სკოლა',need:'სკოლა და სივრცე'}],formats:['საგრანტო კონსორციუმი','გრძელვადიანი პროექტი']},
+ {id:'o7',name:'მუზეუმი „ძველი საათები“',type:'მცირე კერძო მუზეუმი',spheres:['culture'],hood:'მთაწმინდა',x:448,y:488,
+  does:'300-ზე მეტი მექანიკური საათი და სახელოსნო, სადაც მათ აღადგენენ.',
+  vision:'დრო ის თემაა, რომელიც ყველა ასაკს აინტერესებს — გვინდა ახალგაზრდა სტუმრები.',
+  haves:['ექსპონატები','სივრცე'],needs:['მოსწავლეები','სტუმრები','მოხალისეები','ტექნოლოგია'],
+  ideas:[{t:'როგორ მუშაობს დრო — გაკვეთილი',need:'სკოლები, ფიზიკის მასწავლებლები'}],formats:['ერთჯერადი ღონისძიება','გრძელვადიანი პროექტი']},
+ {id:'o8',name:'თეატრალური სტუდია „სცენა 12“',type:'დამოუკიდებელი თეატრი',spheres:['culture'],hood:'მარჯანიშვილი',x:506,y:186,
+  does:'60-ადგილიანი დარბაზი, მოზარდების თეატრალური ჯგუფები.',
+  vision:'თეატრი უბნის მისაღები ოთახი უნდა იყოს.',
+  haves:['დარბაზი','ღონისძიება'],needs:['აუდიტორია','დიზაინი','ბავშვები'],
+  ideas:[{t:'უბნის ისტორიები სცენაზე',need:'მცხოვრებლები, კაფეები, სკოლები'}],formats:['ერთჯერადი ღონისძიება']},
+ {id:'o9',name:'კაფე „დილის ფანჯარა“',type:'უბნის კაფე',spheres:['life'],hood:'ჩუღურეთი',x:566,y:276,
+  does:'30 ადგილი, საოჯახო საუზმე, ბევრი მუდმივი სტუმარი.',
+  vision:'კაფე უბნის შეხვედრის ადგილია, სადაც ყველა ერთმანეთს იცნობს.',
+  haves:['სივრცე','კვება','ნარჩენები'],needs:['აუდიტორია','ღონისძიება'],
+  ideas:[{t:'შაბათის სახელოსნო კაფეში',need:'ხელოსნები და სტუდიები'}],formats:['ერთჯერადი ღონისძიება'],hidden:'დარბაზი 08:00–11:00 თითქმის ცარიელია'},
+ {id:'o10',name:'სამკერვალო „ნემსი“',type:'მცირე სახელოსნო',spheres:['life','biz'],hood:'ჩუღურეთი',x:592,y:300,
+  does:'ტანსაცმლის შეკეთება, მცირე სერიული შეკვეთები, კერვის კურსები.',
+  vision:'გვინდა ნივთებმა უფრო დიდხანს იცოცხლოს.',
+  haves:['ხელობა','ექსპერტიზა'],needs:['სივრცე','აუდიტორია'],
+  ideas:[{t:'„შეაკეთე და დალიე ყავა“ შაბათი',need:'კაფე'}],formats:['ერთჯერადი ღონისძიება','გრძელვადიანი პროექტი']},
+ {id:'o11',name:'ფერმერთა კოოპერატივი „კახური ბაღი“',type:'კოოპერატივი',spheres:['biz'],hood:'ისანი',x:810,y:344,
+  does:'12 ოჯახური მეურნეობა: ხილი, ბოსტნეული, ყველი.',
+  vision:'ქალაქი სოფლის პროდუქტს პირდაპირ უნდა იღებდეს, შუამავლის გარეშე.',
+  haves:['ადგილობრივი პროდუქტი'],needs:['მარკეტინგი','სივრცე','აუდიტორია'],
+  ideas:[{t:'შაბათის ბაზრობა უბანში',need:'ეზო ან დარბაზი, კაფეები'}],formats:['გრძელვადიანი პროექტი']},
+ {id:'o12',name:'რესტორანი „სეზონი“',type:'რესტორანი',spheres:['biz'],hood:'ავლაბარი',x:700,y:424,
+  does:'სეზონური მენიუ, ყოველ სამ თვეში ახალი.',
+  vision:'თეფშზე უნდა ჩანდეს, რა წელიწადის დროა საქართველოში.',
+  haves:['კვება','სივრცე','ნარჩენები'],needs:['ადგილობრივი პროდუქტი','ღონისძიება'],
+  ideas:[{t:'ფერმერის ვახშამი',need:'ფერმერები, მარანი'}],formats:['ერთობლივი პროდუქტი']},
+ {id:'o13',name:'დიზაინ სტუდია „ხაზი“',type:'სტუდია',spheres:['biz','culture'],hood:'ვერა',x:428,y:306,
+  does:'ბრენდინგი, შეფუთვა, სივრცის დიზაინი; 7 დიზაინერი.',
+  vision:'კარგი დიზაინი ნარჩენისგანაც შეიძლება დაიწყოს.',
+  haves:['დიზაინი','მარკეტინგი'],needs:['გადამუშავება','ღონისძიება','სივრცე'],
+  ideas:[{t:'ქალაქის ავეჯი მეორადი მასალით',need:'გადამამუშავებელი, მერიის სივრცე'}],formats:['ერთობლივი პროდუქტი','გრძელვადიანი პროექტი']},
+ {id:'o14',name:'მოხალისეები „ხელი ხელს“',type:'არასამთავრობო',spheres:['social'],hood:'ნაძალადევი',x:418,y:104,
+  does:'350 აქტიური მოხალისე; უბნის დასუფთავება, ხანდაზმულების დახმარება.',
+  vision:'ყველა უბანს უნდა ჰყავდეს ადამიანები, რომლებიც მასზე ზრუნავენ.',
+  haves:['მოხალისეები','აუდიტორია'],needs:['დაფინანსება','სივრცე','ფსიქოლოგი'],
+  ideas:[{t:'უბნის კეთილდღეობის დღე',need:'ფსიქოლოგები, სპორტული კლუბი'}],formats:['ერთჯერადი ღონისძიება','საგრანტო კონსორციუმი']},
+ {id:'o15',name:'სპორტული კლუბი „ფორმა“',type:'სპორტული კლუბი',spheres:['health'],hood:'დიდუბე',x:312,y:64,
+  does:'ფეხბურთი, ჭიდაობა და ფიტნესი ბავშვებისა და მოზარდებისთვის.',
+  vision:'სპორტი ხასიათს და შეუპოვრობას აყალიბებს, არა მხოლოდ კუნთს.',
+  haves:['სპორტი','სივრცე'],needs:['ფსიქოლოგი','მოსწავლეები'],
+  ideas:[{t:'მოზარდთა შეუპოვრობის პროგრამა',need:'ფსიქოლოგი, სკოლა'}],formats:['გრძელვადიანი პროექტი']},
+ {id:'o16',name:'ფსიქოლოგიური ცენტრი „სივრცე შენთვის“',type:'ცენტრი',spheres:['health','edu'],hood:'საბურთალო',x:206,y:258,
+  does:'ბავშვთა და მოზარდთა ფსიქოლოგები, ჯგუფური სოციალურ-ემოციური პროგრამები.',
+  vision:'ემოციური უნარები ისეთივე სასწავლოა, როგორც კითხვა.',
+  haves:['ფსიქოლოგი','ექსპერტიზა'],needs:['მოსწავლეები','სივრცე','აუდიტორია'],
+  ideas:[{t:'ემოციური უნარების კლუბი სკოლაში',need:'სკოლები'}],formats:['გრძელვადიანი პროექტი','საგრანტო კონსორციუმი']},
+ {id:'o17',name:'სტარტაპი „მეორე სიცოცხლე“',type:'გადამამუშავებელი',spheres:['eco'],hood:'ისანი',x:770,y:292,
+  does:'პლასტმასისა და ყავის ნალექის გადამუშავება ახალ ნივთებად.',
+  vision:'ქალაქი ნარჩენს რესურსად უნდა ხედავდეს.',
+  haves:['გადამუშავება','ტექნოლოგია'],needs:['ნარჩენები','დიზაინი','მარკეტინგი'],
+  ideas:[{t:'ტარის დაბრუნების წრე',need:'კაფეები და რესტორნები'}],formats:['გრძელვადიანი პროექტი','ერთობლივი პროდუქტი']},
+ {id:'o18',name:'სოციალური ფონდი „ხიდი“',type:'ფონდი',spheres:['social','biz'],hood:'ვაკე',x:336,y:476,
+  does:'მცირე გრანტები თემის და განათლების ინიციატივებისთვის, წელიწადში 40-მდე.',
+  vision:'პატარა თანხა სწორ დროს დიდ ცვლილებას იწყებს.',
+  haves:['დაფინანსება','მარკეტინგი'],needs:['მოხალისეები','ღონისძიება','აუდიტორია'],
+  ideas:[{t:'უბნის იდეების კონკურსი',need:'მოხალისეები, სივრცე'}],formats:['საგრანტო კონსორციუმი','გრძელვადიანი პროექტი']}
+];
+const PARTNERS = [['o1','o2'],['o9','o10'],['o12','o11'],['o14','o18'],['o7','o8']];
+
+const IDEAS = {
+ 'biz|travel':['გემოს მარშრუტი','სტუმრები ერთ დღეში ნახულობენ მწარმოებელს, აგემოვნებენ პროდუქტს და თან მიაქვთ. ერთი მხარე სტუმრებს აწვდის, მეორე — გამოცდილებას.'],
+ 'edu|travel':['საველე სკოლა','მოსწავლეები გიდთან ერთად სწავლობენ ქალაქსა და ბუნებაში. სკოლა აწვდის ჯგუფს და გაკვეთილის მიზნებს, პარტნიორი — მარშრუტს.'],
+ 'eco|edu':['მწვანე ლაბორატორია','მოსწავლეები ბუნებასა და გადამუშავებას რეალურ ადგილზე სწავლობენ და საკუთარ მცირე პროექტს ქმნიან.'],
+ 'culture|edu':['გაკვეთილი მუზეუმში','საგნის თემა ცოცხალ ექსპონატზე ისწავლება: მასწავლებელი და მუზეუმი ერთად აწყობენ 45-წუთიან ინტერაქტიულ გაკვეთილს.'],
+ 'edu|health':['ემოციური უნარების კლუბი','ფსიქოლოგი და პედაგოგები კვირაში ერთხელ ხვდებიან მოსწავლეებს: ემოციების მართვა, თანამშრომლობა, შეუპოვრობა.'],
+ 'edu|social':['მოხალისე მენტორები','მოხალისეები მოსწავლეებს პროექტებში ეხმარებიან, სკოლა კი სივრცეს და სტრუქტურას სთავაზობს.'],
+ 'biz|edu':['რეალური დავალება','ორგანიზაცია სტუდენტებს ან მოსწავლეებს რეალურ ამოცანას აძლევს, ისინი კი გადაწყვეტას სთავაზობენ.'],
+ 'biz|life':['უბნის ბაზრობა','ადგილობრივი მწარმოებელი შაბათობით უბნის სივრცეში ყიდის პროდუქტს; სივრცე ახალ სტუმრებს იღებს.'],
+ 'biz|social':['კორპორატიული მოხალისეობა','ბიზნესის თანამშრომლები თვეში ერთხელ თემის პროექტში ერთვებიან; ორგანიზაცია დახმარებას და დაფინანსებას იღებს.'],
+ 'culture|life':['უბნის სცენა','კაფე ან სახელოსნო თვეში ორჯერ მასპინძლობს მცირე წარმოდგენას ან გამოფენას.'],
+ 'eco|life':['ტარის დაბრუნების წრე','კაფეები აგროვებენ გამოყენებულ მასალას, გადამამუშავებელი მას ახალ ნივთად აქცევს, რომელიც იმავე კაფეებში იყიდება.'],
+ 'biz|eco':['მეორე სიცოცხლის კოლექცია','ნარჩენი მასალისგან შექმნილი მცირე კოლექცია ორი ორგანიზაციის სახელით.'],
+ 'culture|travel':['საღამოს ტური მუზეუმში','სტუმრებისთვის განსაკუთრებული საღამოს ვიზიტი გიდით და ისტორიებით.'],
+ 'biz|culture':['ბრენდი და ხელოვნება','შემოქმედები ქმნიან ვიზუალს ბიზნესისთვის, ბიზნესი კი გამოფენას აფინანსებს.'],
+ 'health|social':['უბნის კეთილდღეობის დღე','სპორტი, ფსიქოლოგის კონსულტაციები და მოხალისეები — ერთ დღეს, ერთ სივრცეში.'],
+ 'edu|life':['სწავლა უბანში','კაფე ან სახელოსნო მოსწავლეებს მასპინძლობს მოკლე პრაქტიკული გაკვეთილისთვის: როგორ მუშაობს ნამდვილი ბიზნესი.'],
+ 'eco|travel':['მწვანე ბილიკი','ბუნების მარშრუტი, რომელსაც თან ახლავს დასუფთავება და ადგილობრივი ისტორიები.'],
+ 'health|edu':['ემოციური უნარების კლუბი','ფსიქოლოგი და პედაგოგები კვირაში ერთხელ ხვდებიან მოსწავლეებს: ემოციების მართვა, თანამშრომლობა, შეუპოვრობა.']
+};
+
+/* ---------- state ---------- */
+const DEFAULT_ME = {id:'me',name:'სასწავლო ცენტრი „ნაბიჯი“',type:'სასწავლო ცენტრი',spheres:['edu'],hood:'ვაკე',x:322,y:410,
+  does:'დამატებითი განათლება 8–15 წლის მოსწავლეებისთვის: საბუნებისმეტყველო წრეები და კვლევითი პროექტები.',
+  vision:'გვინდა ყველა ბავშვმა ერთხელ მაინც ნამდვილი კვლევა ჩაატაროს — ლაბორატორიაში, ქალაქში, ბუნებაში.',
+  haves:['დარბაზი','ექსპერტიზა','მოსწავლეები'],needs:['ბუნება','გიდი','ექსპონატები','დაფინანსება'],
+  ideas:[{t:'ბუნების კვლევითი კლუბი',need:'გიდები, მუზეუმები, ფონდი'}],formats:['გრძელვადიანი პროექტი','საგრანტო კონსორციუმი']};
+let me = load('connect-me') || JSON.parse(JSON.stringify(DEFAULT_ME));
+let draft = null;
+let view = 'home';
+let sphereFilter = new Set();
+let feedMode = 'orgs';
+let radius = 2;
+let layers = {partners:true,hidden:true,coffee:true};
+let dismissed = new Set();
+let connections = [];
+let blind = null;
+let query = '';
+let contexts = [
+  {id:'c1',name:'უბნის საშემოდგომო ფესტივალი',hood:'ჩუღურეთი',desc:'კაფეები, სახელოსნოები და თეატრი ერთ შაბათ-კვირას უბნის ქუჩებს ხსნიან.',spheres:['life','culture'],members:9,joined:false,by:'კაფე „დილის ფანჯარა“'},
+  {id:'c2',name:'ბავშვები და ბუნება ქალაქში',hood:'მთელი ქალაქი',desc:'სკოლები, ბაღები და გიდები ერთად ქმნიან ბუნების გაკვეთილებს ქალაქის პარკებში.',spheres:['edu','eco','travel'],members:12,joined:false,by:'გიდების კოოპერატივი „ბილიკი“'},
+  {id:'c3',name:'ქალაქის ავეჯი მეორადი მასალით',hood:'ვერა, ისანი',desc:'დიზაინერები და გადამამუშავებლები სკამებს და ჩრდილებს ქმნიან ნარჩენი მასალისგან.',spheres:['eco','biz','culture'],members:6,joined:false,by:'დიზაინ სტუდია „ხაზი“'},
+  {id:'c4',name:'ადრეული განათლების კონსორციუმი',hood:'საქართველო',desc:'ბაღები, უნივერსიტეტები და ფსიქოლოგები ერთად ემზადებიან საერთაშორისო საგრანტო კონკურსისთვის.',spheres:['edu','health'],members:4,joined:false,by:'სტუდენტური ლაბორატორია „ცნობისმოყვარეობა“'}
+];
+
+function load(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const byId = id => id === 'me' ? me : ORGS.find(o => o.id === id);
+const chips = sp => sp.map(s => `<span class="chip" style="--c:${SPH[s].c}">${SPH[s].n}</span>`).join('');
+const tags = (arr, cls, hits=[]) => arr.map(t => `<span class="tag ${cls} ${hits.includes(t)?'hit':''}">${esc(t)}</span>`).join('');
+const dist = (a,b) => Math.hypot(a.x-b.x, a.y-b.y) / 100;
+const km = d => d.toFixed(1).replace('.', ',') + ' კმ';
+const WD = ['კვ','ორშ','სამ','ოთხ','ხუთ','პარ','შაბ'], MO = ['იან','თებ','მარ','აპრ','მაი','ივნ','ივლ','აგვ','სექ','ოქტ','ნოე','დეკ'];
+const dlabel = d => `${WD[d.getDay()]}, ${d.getDate()} ${MO[d.getMonth()]}`;
+function nextWorkdays(n){const out=[];const d=new Date();while(out.length<n){d.setDate(d.getDate()+1);if(d.getDay()!==0&&d.getDay()!==6)out.push(new Date(d))}return out}
+function nextThursday(){const d=new Date();do{d.setDate(d.getDate()+1)}while(d.getDay()!==4);return d}
+
+function ideaFor(a,b){
+  for(const x of a.spheres) for(const y of b.spheres){
+    if(x===y) continue;
+    const k=[x,y].sort().join('|');
+    if(IDEAS[k]) return {t:IDEAS[k][0],x:IDEAS[k][1]};
+  }
+  const g=b.haves.filter(t=>a.needs.includes(t));
+  if(a.spheres.some(s=>b.spheres.includes(s))) return {t:'ერთობლივი ქსელი',x:`ერთი სფეროს ორი ორგანიზაცია აერთიანებს რესურსს (${[...a.haves.slice(0,1),...b.haves.slice(0,1)].join(', ')}) და ერთად სთავაზობს მომსახურებას უფრო დიდ აუდიტორიას.`};
+  return {t:'ერთობლივი პილოტი',x:`სამთვიანი პილოტი, სადაც ${g[0]||b.haves[0]} და ${a.haves[0]} ერთად ქმნის ახალ შეთავაზებას.`};
+}
+function match(a,b){
+  const give=b.haves.filter(t=>a.needs.includes(t));
+  const get=a.haves.filter(t=>b.needs.includes(t));
+  const shared=a.spheres.some(s=>b.spheres.includes(s));
+  const d=dist(a,b);
+  let s=give.length*3+get.length*3+(give.length&&get.length?2:0)+(shared?0.5:2)+(d<1.5?2:d<3?1:0);
+  const reasons=[];
+  if(give.length) reasons.push(`მათი შეთავაზება: <b>${give.join(', ')}</b>`);
+  if(get.length) reasons.push(`თქვენი რესურსი: <b>${get.join(', ')}</b>`);
+  if(!shared) reasons.push(`სხვადასხვა სფერო ერთმანეთს ავსებს: ${a.spheres.map(x=>SPH[x].n).join(', ')} + ${b.spheres.map(x=>SPH[x].n).join(', ')}`);
+  if(d<3) reasons.push(`ახლოს ხართ — ${km(d)}`);
+  return {o:b,s,pct:Math.min(97,Math.round(s/17*100)),give,get,d,reasons,idea:ideaFor(a,b)};
+}
+function ranked(){return ORGS.map(o=>match(me,o)).sort((x,y)=>y.s-x.s)}
+function suggestions(n){const done=new Set(connections.map(c=>c.id));return ranked().filter(m=>!dismissed.has(m.o.id)&&!done.has(m.o.id)).slice(0,n)}
+function passes(o){return !sphereFilter.size||o.spheres.some(s=>sphereFilter.has(s))}
+
+function qrSvg(seed,size=96){
+  let h=2166136261;for(const ch of seed){h^=ch.codePointAt(0);h=Math.imul(h,16777619)}
+  const N=21,c=size/N;let r='';
+  const finder=(x,y)=>x<7&&y<7||x>=N-7&&y<7||x<7&&y>=N-7;
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+    let on;
+    if(finder(x,y)){const fx=x>=N-7?x-(N-7):x,fy=y>=N-7?y-(N-7):y;on=fx===0||fy===0||fx===6||fy===6||(fx>=2&&fx<=4&&fy>=2&&fy<=4)}
+    else{h^=h<<13;h^=h>>>17;h^=h<<5;on=(h>>>0)%100<46}
+    if(on)r+=`<rect x="${(x*c).toFixed(2)}" y="${(y*c).toFixed(2)}" width="${(c+.2).toFixed(2)}" height="${(c+.2).toFixed(2)}"/>`;
+  }
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="ორგანიზაციის გვერდის QR კოდი (სადემონსტრაციო)"><rect width="${size}" height="${size}" rx="6" fill="#fff"/><g fill="#2a221c" transform="translate(${size*.06} ${size*.06}) scale(.88)">${r}</g></svg>`;
+}
+
+/* ---------- components ---------- */
+function connectBtns(o){return `<div class="acts">
+  <button class="btn sm blue" data-act="connect" data-id="${o.id}" data-m="letter">მიწერა</button>
+  <button class="btn sm" data-act="connect" data-id="${o.id}" data-m="coffee">ყავაზე დაპატიჟება</button>
+  <button class="btn sm" data-act="connect" data-id="${o.id}" data-m="idea">იდეაზე შეერთება</button></div>`}
+
+function orgCard(o,extra=''){
+  const m=match(me,o);
+  return `<article class="card">
+    <div style="display:grid;gap:6px">
+      <h3><button class="link" data-act="open-org" data-id="${o.id}">${esc(o.name)}</button></h3>
+      <div class="sub">${chips(o.spheres)}<span>· ${esc(o.hood)}</span><span class="num">· ${km(m.d)}</span></div>
+    </div>
+    <p class="desc">${esc(o.does)}</p>
+    ${extra}
+    <div class="kv"><span class="label">სთავაზობენ</span><div class="tags">${tags(o.haves,'have',me.needs)}</div></div>
+    <div class="kv"><span class="label">სჭირდებათ</span><div class="tags">${tags(o.needs,'need',me.haves)}</div></div>
+    ${o.hidden&&layers.hidden?`<p class="desc"><span class="badge">ფარული რესურსი</span> ${esc(o.hidden)}</p>`:''}
+    ${connectBtns(o)}
+  </article>`;
+}
+function ideaCard(o,i){
+  return `<article class="card">
+    <span class="label">იდეის ბარათი</span>
+    <h3>${esc(i.t)}</h3>
+    <div class="sub">${chips(o.spheres)}</div>
+    <p class="desc">ავტორი: <button class="link" data-act="open-org" data-id="${o.id}"><b>${esc(o.name)}</b></button> · ${esc(o.hood)}</p>
+    <div class="idea"><span class="label">ეძებენ</span><p>${esc(i.need)}</p></div>
+    <div class="acts"><button class="btn sm primary" data-act="connect" data-id="${o.id}" data-m="idea">შევუერთდე იდეას</button><button class="btn sm" data-act="connect" data-id="${o.id}" data-m="coffee">ყავაზე განვიხილოთ</button></div>
+  </article>`;
+}
+function sugCard(m,full=true){
+  const o=m.o;
+  return `<article class="card sug">
+    <header><div class="pct" style="--p:${m.pct}" title="დამთხვევა"><span>${m.pct}%</span></div>
+      <div style="min-width:0;display:grid;gap:4px"><h3><button class="link" data-act="open-org" data-id="${o.id}">${esc(o.name)}</button></h3>
+      <div class="sub">${chips(o.spheres)}<span class="num">· ${km(m.d)}</span></div></div></header>
+    <ul class="why">${m.reasons.slice(0,full?4:2).map(r=>`<li><span>${r}</span></li>`).join('')}</ul>
+    <div class="idea"><span class="label">საერთო იდეის ესკიზი</span><strong>${esc(m.idea.t)}</strong>${full?`<p>${esc(m.idea.x)}</p>`:''}</div>
+    ${full?`<div class="acts"><button class="btn sm primary" data-act="connect" data-id="${o.id}" data-m="letter">დაკავშირება</button><button class="btn sm" data-act="connect" data-id="${o.id}" data-m="coffee">ყავაზე</button><button class="btn sm ghost" data-act="dismiss" data-id="${o.id}">სხვა შეთავაზება</button></div>`
+          :`<div class="acts"><button class="btn sm" data-act="nav" data-v="match">ნახე დეტალურად</button></div>`}
+  </article>`;
+}
+function visionPage(o,isMe){
+  const c=SPH[o.spheres[0]]?.c||'var(--blue)';
+  return `<div class="vp" style="--c:${c}">
+    <div class="vp-head">
+      <div class="who"><span class="label">ორგანიზაციის გვერდი</span><h2>${esc(o.name)||'ორგანიზაციის სახელი'}</h2>
+        <div class="sub row" style="gap:6px">${chips(o.spheres)}</div>
+        <p class="desc" style="color:var(--muted)">${esc(o.type)} · ${esc(o.hood)} <span class="verified">· დადასტურებული</span></p></div>
+      <div style="display:grid;gap:4px;justify-items:center">${qrSvg(o.name||'x',92)}<small style="color:var(--muted);font-size:.72rem">დაასკანერე და დაუკავშირდი</small></div>
+    </div>
+    <div class="vp-body">
+      <section><span class="label">რას ვაკეთებთ</span><p>${esc(o.does)}</p></section>
+      <section><span class="label">ჩვენი მიზანი</span><p style="font-size:1.05rem">${esc(o.vision)}</p></section>
+      <div class="two" style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        <section><span class="label">რას ვთავაზობთ</span><div class="tags">${tags(o.haves,'have')||'<small>—</small>'}</div></section>
+        <section><span class="label">რა გვჭირდება</span><div class="tags">${tags(o.needs,'need')||'<small>—</small>'}</div></section>
+      </div>
+      ${o.ideas?.length?`<section><span class="label">იდეები, რომლებზეც პარტნიორს ვეძებთ</span>${o.ideas.map(i=>`<div class="idea"><strong>${esc(i.t)}</strong><p>ვეძებთ: ${esc(i.need)}</p></div>`).join('')}</section>`:''}
+      ${o.hidden?`<section><span class="label">ფარული რესურსი</span><p>${esc(o.hidden)}</p></section>`:''}
+      <section><span class="label">თანამშრომლობის ფორმატი</span><div class="tags">${(o.formats||[]).map(f=>`<span class="tag">${esc(f)}</span>`).join('')}</div></section>
+      ${isMe?'':connectBtns(o)}
+    </div></div>`;
+}
+
+/* ---------- views ---------- */
+const VIEWS = [['home','მთავარი'],['feed','საერთო სივრცე'],['map','რუკა'],['match','Connect გთავაზობს'],['search','ძებნა'],['contexts','კონტექსტები'],['profile','შენი გვერდი']];
+function renderNav(){$('#nav').innerHTML=VIEWS.map(([v,n])=>`<button data-act="nav" data-v="${v}" ${v===view?'aria-current="page"':''}>${n}</button>`).join('')}
+function sphereFilters(){return `<div class="filters">${Object.entries(SPH).map(([k,s])=>`<button class="fchip" style="--c:${s.c}" data-act="sph" data-k="${k}" aria-pressed="${sphereFilter.has(k)}">${s.n}</button>`).join('')}${sphereFilter.size?`<button class="fchip" data-act="sph-clear">ყველა</button>`:''}</div>`}
+
+function networkArt(){
+  const keys=Object.keys(SPH),R=138,cx=200,cy=200;
+  const pts=keys.map((k,i)=>{const a=-Math.PI/2+i*2*Math.PI/keys.length;return {k,x:cx+R*Math.cos(a),y:cy+R*Math.sin(a),a}});
+  const cross=[[0,1],[1,4],[2,3],[3,5],[5,7],[6,1],[0,7]];
+  return `<svg viewBox="-78 -4 556 408" role="img" aria-label="რვა სფერო ერთ ქსელში">
+    <circle cx="200" cy="200" r="${R}" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+    <g><circle cx="200" cy="200" r="176" fill="none" stroke="var(--blue)" stroke-width="2" stroke-dasharray="2 9" stroke-linecap="round"/>
+      <path d="M58 96 A176 176 0 0 1 250 31" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M240 22 L252 31 L241 41" fill="none" stroke="var(--primary)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><animateTransform attributeName="transform" type="rotate" from="0 200 200" to="360 200 200" dur="40s" repeatCount="indefinite"/></g>
+    ${cross.map(([a,b])=>`<line x1="${pts[a].x}" y1="${pts[a].y}" x2="${pts[b].x}" y2="${pts[b].y}" stroke="var(--slate)" stroke-width="1.5" stroke-dasharray="4 5" opacity=".6"/>`).join('')}
+    ${pts.map(p=>`<line x1="200" y1="200" x2="${p.x}" y2="${p.y}" stroke="${SPH[p.k].c}" stroke-width="1.5" opacity=".55"/>`).join('')}
+    <circle cx="200" cy="200" r="46" fill="var(--surface)" stroke="var(--line)"/>
+    <path d="M181 186 h38 l-4.5 32 a5 5 0 0 1 -5 4.4 h-19 a5 5 0 0 1 -5 -4.4 z" fill="var(--coffee)"/>
+    <path d="M219 193 h5 a7 7 0 0 1 0 14 h-6" fill="none" stroke="var(--coffee)" stroke-width="3.2"/>
+    <path d="M192 178 q4 -6 0 -12 M202 178 q4 -6 0 -12" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"/>
+    ${pts.map(p=>{const lx=200+(R+0)*Math.cos(p.a),ly=200+(R+0)*Math.sin(p.a);const tx=Math.cos(p.a)>.3?'start':Math.cos(p.a)<-.3?'end':'middle';const ox=Math.cos(p.a)*18,oy=Math.sin(p.a)*18+4;
+      return `<circle cx="${lx}" cy="${ly}" r="11" fill="${SPH[p.k].c}" stroke="var(--surface)" stroke-width="3"/><text x="${lx+ox}" y="${ly+oy}" text-anchor="${tx}" font-size="12.5" fill="var(--ink)" font-family="var(--f-body)">${SPH[p.k].n.split(' ')[0]}</text>`}).join('')}
+  </svg>`;
+}
+
+function renderHome(){
+  const ideasN=ORGS.reduce((a,o)=>a+o.ideas.length,0);
+  const top=suggestions(3);
+  const bd=nextThursday();
+  return `
+  <section class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">Connect · ორგანიზაციების ქსელი</p>
+      <h1>აღმოაჩინე შენი პარტნიორი.<br>შექმენით ერთად.</h1>
+      <p class="lead">სკოლა, მუზეუმი, სასტუმრო, კაფე, ფონდი თუ სახელოსნო — აღწერე ვინ ხარ და რა იდეა გაქვს. Connect გიპოვის ორგანიზაციას, რომელთანაც საერთო პროდუქტს შექმნი.</p>
+      <div class="row"><button class="btn primary" data-act="nav" data-v="profile">შექმენი შენი გვერდი</button><button class="btn" data-act="nav" data-v="map">ნახე რუკაზე</button><button class="btn ghost" data-act="nav" data-v="match">ჩემი შეთავაზებები</button></div>
+      <p class="meta"><span class="num">${ORGS.length}</span> ორგანიზაცია · <span class="num">${ideasN}</span> ღია იდეა · <span class="num">${contexts.length}</span> კონტექსტი · <span class="num">8</span> სფერო</p>
+    </div>
+    <div class="hero-art">${networkArt()}</div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>როგორ მუშაობს</h2></div>
+    <div class="steps">
+      <div class="step" style="--c:var(--blue)"><span class="n">01</span><h3>შექმენი შენი გვერდი</h3><p>ვინ ხართ, რას აკეთებთ, რას სთავაზობთ და რა გჭირდებათ. 10 წუთი.</p></div>
+      <div class="step" style="--c:var(--primary)"><span class="n">02</span><h3>იპოვე</h3><p>AI შეთავაზებები, ძებნა ჩვეულებრივი ენით, რუკა ან საკუთარი კონტექსტი.</p></div>
+      <div class="step" style="--c:var(--slate)"><span class="n">03</span><h3>დაუკავშირდი</h3><p>მზა წერილი, ყავა Connect Coffee-ში ან შეერთება სხვის იდეაზე.</p></div>
+      <div class="step" style="--c:var(--line)"><span class="n">04</span><h3>შექმენით ერთად</h3><p>მიიღეთ საერთო სამუშაო სივრცე. დასრულებული პროექტი ორივე ორგანიზაციის გვერდზე გამოჩნდება, როგორც თქვენი საერთო ნამუშევარი.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><div style="display:grid;gap:6px"><h2>ამ კვირის შეთავაზებები</h2><p>შერჩეულია თქვენი გვერდისა და არსებული ბაზის მიხედვით</p></div><button class="btn sm" data-act="nav" data-v="match">ყველა შეთავაზება</button></div>
+    <div class="grid">${top.map(m=>sugCard(m,false)).join('')}</div>
+  </section>
+
+  <section class="split">
+    <div class="panel coffee">
+      <span class="label">ბრმა ყავა</span>
+      <h2>30 წუთი უცნობ ორგანიზაციასთან</h2>
+      <p style="color:var(--muted)">ყოველ კვირას Connect ორ ორგანიზაციას სხვადასხვა სფეროდან არჩევს და Connect Coffee-ში ეპატიჟება. შემდეგი: <b>${dlabel(bd)}, 10:00</b>.</p>
+      ${blind?blindResult():`<div class="row"><button class="btn primary" data-act="blind">შემირჩიე წყვილი</button></div>`}
+    </div>
+    <div class="panel">
+      <span class="label">QR ყველგან</span>
+      <h2>ერთი კოდი — შენი გვერდი</h2>
+      <div class="qr-row">${qrSvg(me.name,104)}<p style="color:var(--muted);flex:1 1 220px">ყველა ორგანიზაციის გვერდს თავისი QR კოდი აქვს — კარზე, ვიტრინაზე, სავიზიტოზე ან ღონისძიების სტენდზე. დაასკანერე, ნახე ვინ არიან და ერთი ღილაკით დაუკავშირდი.</p></div>
+    </div>
+  </section>
+  <p class="demo">პროტოტიპი · ორგანიზაციები და მონაცემები სადემონსტრაციოა</p>`;
+}
+function blindResult(){
+  const o=byId(blind.id),m=match(me,o);
+  return `<div class="idea" style="background:var(--surface)"><span class="label">შენი წყვილი</span><strong>${esc(o.name)}</strong><p>${chips(o.spheres)} · ${esc(o.hood)}</p><p>სასაუბრო თემა: <b>${esc(m.idea.t)}</b></p><p>${dlabel(nextThursday())}, 10:00 · Connect Coffee · ვერა</p></div>
+  <div class="row"><button class="btn primary" data-act="blind-ok">ვეთანხმები</button><button class="btn ghost" data-act="blind">სხვა წყვილი</button></div>`;
+}
+
+function renderFeed(){
+  let list=ORGS.filter(passes);
+  const body = feedMode==='orgs'
+    ? list.map(o=>orgCard(o)).join('')
+    : list.flatMap(o=>o.ideas.map(i=>ideaCard(o,i))).join('');
+  return `<section>
+    <div class="section-head"><div style="display:grid;gap:6px"><h2>საერთო სივრცე</h2><p>ყველა ორგანიზაცია და ღია იდეა ერთ სივრცეში.</p><div class="row" style="gap:8px;font-size:.85rem"><span class="tag have">მწვანე — შეთავაზება</span><span class="tag need">ყვითელი — საჭიროება</span><span class="tag hit">ლურჯი — დამთხვევა მომხმარებლის გვერდთან</span></div></div>
+      <div class="seg" role="group" aria-label="რას ვაჩვენოთ"><button data-act="feed-mode" data-m="orgs" aria-pressed="${feedMode==='orgs'}">ორგანიზაციები</button><button data-act="feed-mode" data-m="ideas" aria-pressed="${feedMode==='ideas'}">იდეები</button></div></div>
+    ${sphereFilters()}
+    <div class="grid" style="margin-top:18px">${body||'<div class="empty">ამ სფეროში ჯერ არავინაა. შექმენი კონტექსტი და მოიწვიე პირველები.</div>'}</div>
+  </section>`;
+}
+
+function renderMap(){
+  const near=ORGS.filter(passes).map(o=>({o,d:dist(me,o)})).filter(x=>radius===99||x.d<=radius).sort((a,b)=>a.d-b.d);
+  const nearIds=new Set(near.map(x=>x.o.id));
+  const river='M150 0 C230 110 360 170 460 250 S600 360 650 470 S760 590 840 640';
+  const pins=ORGS.filter(passes).map(o=>{const on=nearIds.has(o.id);return `<g class="pin" tabindex="0" role="button" aria-label="${esc(o.name)}" data-act="open-org" data-id="${o.id}" opacity="${on?1:.35}">
+      <circle class="dot" cx="${o.x}" cy="${o.y}" r="13" fill="${SPH[o.spheres[0]].c}" stroke="var(--surface)" stroke-width="3"/>
+      ${o.spheres[1]?`<circle cx="${o.x+8}" cy="${o.y-8}" r="4.5" fill="${SPH[o.spheres[1]].c}" stroke="var(--surface)" stroke-width="1.5"/>`:''}
+      ${on?`<text x="${o.x}" y="${o.y+32}" text-anchor="middle" font-size="17" font-weight="600" fill="var(--ink)" font-family="var(--f-body)" paint-order="stroke" stroke="var(--surface)" stroke-width="4">${esc(o.name.replace(/^.*?„/,'„'))}</text>`:''}</g>`}).join('');
+  const r=radius===99?0:radius*100;
+  return `<section>
+    <div class="section-head"><div style="display:grid;gap:6px"><h2>რუკა</h2><p>ვინ არის თქვენ ახლოს.</p><div class="legend" role="list" aria-label="რუკის ლეგენდა">
+  <span class="lg" role="listitem"><svg width="22" height="16" viewBox="0 0 22 16"><circle cx="11" cy="8" r="6" fill="var(--s-edu)" stroke="var(--surface)" stroke-width="2"/></svg>ორგანიზაცია <small>ფერი — სფერო</small></span>
+  <span class="lg" role="listitem"><svg width="22" height="16" viewBox="0 0 22 16"><circle cx="11" cy="8" r="7.5" fill="var(--blue)" fill-opacity=".2"/><circle cx="11" cy="8" r="4.5" fill="var(--blue)" stroke="var(--surface)" stroke-width="1.5"/></svg>თქვენ</span>
+  <span class="lg" role="listitem"><svg width="22" height="16" viewBox="0 0 22 16"><circle cx="11" cy="8" r="7" fill="var(--blue)" fill-opacity=".08" stroke="var(--blue)" stroke-dasharray="3 2"/></svg>არჩეული რადიუსი</span>
+  <span class="lg" role="listitem"><svg width="26" height="16" viewBox="0 0 26 16"><line x1="2" y1="8" x2="24" y2="8" stroke="var(--green)" stroke-width="2.5" stroke-dasharray="4 3"/></svg>არსებული პარტნიორობა</span>
+  <span class="lg" role="listitem"><svg width="26" height="16" viewBox="0 0 26 16"><line x1="2" y1="8" x2="24" y2="8" stroke="var(--primary)" stroke-width="2.5"/></svg>თქვენი კავშირი</span>
+  <span class="lg" role="listitem"><svg width="22" height="16" viewBox="0 0 22 16"><path d="M11 2 l6 6 l-6 6 l-6 -6 z" fill="var(--orange)"/></svg>ფარული რესურსი</span>
+  <span class="lg" role="listitem"><svg width="22" height="16" viewBox="0 0 22 16"><circle cx="11" cy="8" r="7" fill="var(--surface)" stroke="var(--coffee)" stroke-width="1.5"/><path d="M8 5 h6 l-.8 5.5 h-4.4 z" fill="var(--coffee)"/></svg>Connect Coffee — შეხვედრის ადგილი</span>
+</div></div></div>
+    <div class="map-wrap">
+      <div class="map-box">
+        <div class="map-tools">
+          <div class="seg" role="group" aria-label="რადიუსი">${[[1,'1 კმ'],[2,'2 კმ'],[4,'4 კმ'],[99,'ქალაქი']].map(([v,n])=>`<button data-act="radius" data-r="${v}" aria-pressed="${radius===v}">${n}</button>`).join('')}</div>
+          <div class="layers">
+            <label><input type="checkbox" id="ly-partners" data-act="layer" data-l="partners" ${layers.partners?'checked':''}> პარტნიორობები</label>
+            <label><input type="checkbox" id="ly-hidden" data-act="layer" data-l="hidden" ${layers.hidden?'checked':''}> ფარული რესურსები</label>
+            <label><input type="checkbox" id="ly-coffee" data-act="layer" data-l="coffee" ${layers.coffee?'checked':''}> Connect Coffee</label>
+          </div>
+        </div>
+        <svg viewBox="0 0 1000 640" role="img" aria-label="ორგანიზაციების რუკა">
+          <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="var(--line)"/></pattern></defs>
+          <rect width="1000" height="640" fill="url(#dots)"/>
+          <path d="${river}" fill="none" stroke="var(--river)" stroke-width="30" stroke-linecap="round"/>
+          <text x="700" y="535" font-size="17" fill="var(--blue)" font-style="italic" transform="rotate(52 700 535)" font-family="var(--f-body)">მტკვარი</text>
+          ${Object.entries(HOODS).map(([n,[x,y]])=>`<text x="${x}" y="${y-22}" text-anchor="middle" font-size="16" letter-spacing=".06em" fill="var(--muted)" opacity=".7" font-family="var(--f-body)">${n.toUpperCase()}</text>`).join('')}
+          ${r?`<circle cx="${me.x}" cy="${me.y}" r="${r}" fill="var(--blue)" fill-opacity=".07" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="6 6"/>`:''}
+          ${layers.partners?PARTNERS.map(([a,b])=>{const A=byId(a),B=byId(b);return `<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="var(--green)" stroke-width="2.5" stroke-dasharray="5 5"/>`}).join(''):''}
+          ${connections.map(c=>{const B=byId(c.id);return `<line x1="${me.x}" y1="${me.y}" x2="${B.x}" y2="${B.y}" stroke="var(--primary)" stroke-width="2.5"/>`}).join('')}
+          ${layers.coffee?COFFEES.map(c=>`<g><circle cx="${c.x}" cy="${c.y}" r="15" fill="var(--surface)" stroke="var(--coffee)" stroke-width="2"/><path d="M${c.x-6} ${c.y-5} h12 l-1.5 10 h-9 z" fill="var(--coffee)"/><title>${c.name}</title></g>`).join(''):''}
+          ${pins}
+          ${layers.hidden?ORGS.filter(o=>o.hidden&&passes(o)).map(o=>`<path d="M${o.x-14} ${o.y+2} l6 -6 l6 6 l-6 6 z" fill="var(--orange)" stroke="var(--surface)" stroke-width="1.5" transform="translate(-6 -16)"><title>${esc(o.hidden)}</title></path>`).join(''):''}
+          <g data-act="nav" data-v="profile" class="pin" role="button" tabindex="0" aria-label="ჩემი ორგანიზაცია">
+            <circle cx="${me.x}" cy="${me.y}" r="17" fill="var(--blue)" fill-opacity=".18"/>
+            <circle cx="${me.x}" cy="${me.y}" r="9" fill="var(--blue)" stroke="var(--surface)" stroke-width="3"/>
+            <text x="${me.x}" y="${me.y-22}" text-anchor="middle" font-size="17" font-weight="700" fill="var(--blue)" font-family="var(--f-body)" paint-order="stroke" stroke="var(--surface)" stroke-width="4">თქვენ</text></g>
+        </svg>
+      </div>
+      <aside class="side" aria-label="ახლოს მყოფი ორგანიზაციები">
+        ${sphereFilters()}
+        <span class="label" style="margin-top:6px">${radius===99?'მთელ ქალაქში':radius+' კმ-ის რადიუსში'} · <span class="num">${near.length}</span></span>
+        ${near.length?near.map(({o,d})=>`<button class="near" data-act="open-org" data-id="${o.id}" style="--c:${SPH[o.spheres[0]].c}"><span class="dot"></span><div><b>${esc(o.name)}</b><br><small>${esc(o.type)} · ${esc(o.hood)}</small></div><span class="d">${km(d)}</span></button>`).join('')
+          :'<div class="empty">ამ რადიუსში არავინაა. გაზარდე რადიუსი.</div>'}
+      </aside>
+    </div>
+  </section>`;
+}
+
+
+function renderMatch(){
+  const list=suggestions(3);
+  return `<section>
+    <div class="section-head"><div style="display:grid;gap:6px"><h2>Connect გთავაზობს</h2><p>ეს სამი ორგანიზაცია თქვენს გვერდს ყველაზე მეტად შეესაბამება. შერჩევისას გათვალისწინებულია, რას სთავაზობს და რა სჭირდება თითოეულ მხარეს, რამდენად ავსებს ერთმანეთს თქვენი სფეროები და რა მანძილია თქვენ შორის. გადაწყვეტილებას თქვენ იღებთ და პირველ ნაბიჯსაც თქვენ დგამთ.</p></div>
+      <button class="btn sm" data-act="nav" data-v="profile">შეცვალე ჩემი გვერდი</button></div>
+    <div class="grid">${list.length?list.map(m=>sugCard(m,true)).join(''):'<div class="empty">შეთავაზებები ამოიწურა. განაახლე „რა გჭირდებათ“ შენს გვერდზე და ახლები გამოჩნდება.</div>'}</div>
+    ${dismissed.size?`<p class="demo"><button class="link" data-act="undismiss" style="color:var(--blue)">დაბრუნება: ${dismissed.size} გამოტოვებული შეთავაზება</button></p>`:''}
+  </section>`;
+}
+
+const STOP=new Set(['ვეძებ','ვინ','აკეთებს','რომ','და','ან','ჩვენ','მინდა','გვჭირდება','სჭირდება','ვინმე','სადმე','ახლოს','ჩემთან','არის','თვის','კაცზე','ადამიანზე','საღამოს','დილით','რომელიც']);
+const stem=w=>w.length<=4?w:w.slice(0,Math.max(4,Math.min(5,w.length-2)));
+function doSearch(q){
+  const words=q.toLowerCase().replace(/[.,!?„“"]/g,' ').split(/\s+/).filter(w=>w.length>2&&!STOP.has(w)&&!/^\d+$/.test(w));
+  if(!words.length) return [];
+  const stems=words.map(stem);
+  const hoodHit=Object.keys(HOODS).filter(h=>stems.some(s=>h.startsWith(s)||s.startsWith(h.slice(0,4))));
+  return ORGS.filter(passes).map(o=>{
+    let s=0;const why=[];
+    const hit=(arr)=>arr.filter(t=>stems.some(st=>t.toLowerCase().includes(st)));
+    const hv=hit(o.haves); if(hv.length){s+=hv.length*3;why.push('სთავაზობენ: '+hv.join(', '))}
+    if(o.hidden&&stems.some(st=>o.hidden.toLowerCase().includes(st))){s+=3;why.push('ფარული რესურსი: '+o.hidden)}
+    if(hoodHit.includes(o.hood)){s+=2;why.push('უბანი: '+o.hood)}
+    const sp=o.spheres.filter(k=>stems.some(st=>SPH[k].n.toLowerCase().includes(st))); if(sp.length){s+=1.5;why.push('სფერო: '+sp.map(k=>SPH[k].n).join(', '))}
+    const txt=(o.name+' '+o.type+' '+o.does+' '+o.vision+' '+o.ideas.map(i=>i.t+' '+i.need).join(' ')).toLowerCase();
+    const tw=stems.filter(st=>txt.includes(st)); if(tw.length){s+=tw.length;if(!hv.length)why.push('აღწერაში ემთხვევა: '+tw.length+' სიტყვა')}
+    const nd=hit(o.needs); if(nd.length){s+=.5}
+    return {o,s,why};
+  }).filter(r=>r.s>0).sort((a,b)=>b.s-a.s);
+}
+function renderSearch(){
+  const res=query?doSearch(query):[];
+  const ex=['დარბაზი 40 კაცზე ვაკეში','ვინ აკეთებს ბავშვებისთვის ბუნების ექსკურსიებს','ადგილობრივი პროდუქტი რესტორნისთვის','ფსიქოლოგი მოზარდებისთვის','ნარჩენების გადამუშავება'];
+  return `<section>
+    <div class="section-head"><div style="display:grid;gap:6px"><h2>ძებნა</h2><p>დაწერე, რაც გჭირდება, ჩვეულებრივი ენით — სისტემა ეძებს რესურსებში, აღწერებში, იდეებში და უბნებში.</p></div></div>
+    <form id="sform" class="row" style="flex-wrap:nowrap"><input type="search" id="q" value="${esc(query)}" placeholder="მაგ.: ვეძებ დარბაზს 40 კაცზე სამშაბათ საღამოს ვაკეში" aria-label="ძებნა"><button class="btn blue" type="submit">ძებნა</button></form>
+    <div class="filters" style="margin-top:12px">${ex.map(e=>`<button class="fchip" data-act="ex" data-q="${esc(e)}">${esc(e)}</button>`).join('')}</div>
+    <div style="margin-top:12px">${sphereFilters()}</div>
+    <div class="grid" style="margin-top:18px">${query?(res.length?res.map(r=>orgCard(r.o,`<p class="results-why">რატომ: ${r.why.map(esc).join(' · ')}</p>`)).join(''):'<div class="empty">ვერაფერი ვიპოვე. სცადე სხვა სიტყვა ან შექმენი კონტექსტი — იქნებ სხვებიც ამას ეძებენ.</div>'):''}</div>
+  </section>`;
+}
+
+function renderContexts(){
+  return `<section>
+    <div class="section-head"><div style="display:grid;gap:6px"><h2>კონტექსტები</h2><p>თუ შენი იდეა არცერთ სფეროს არ ერგება, შექმენი კონტექსტი — თემა ან გამოწვევა, რომელზეც სხვებს იწვევ. როცა 15 ორგანიზაცია შეუერთდება, კონტექსტი ახალ ქვესფეროდ იქცევა.</p></div></div>
+    <div class="grid">
+      ${contexts.map(c=>`<article class="card">
+        <span class="label">${esc(c.hood)}</span><h3>${esc(c.name)}</h3>
+        <div class="sub">${chips(c.spheres)}</div>
+        <p class="desc">${esc(c.desc)}</p>
+        <div style="display:grid;gap:6px"><div class="bar-prog"><i style="width:${Math.min(100,c.members/15*100)}%"></i></div>
+          <small style="color:var(--muted)"><span class="num">${c.members}</span> / 15 ორგანიზაცია ${c.members>=15?'· ახალი ქვესფერო':''}</small></div>
+        <small style="color:var(--muted)">შექმნა: ${esc(c.by)}</small>
+        <div class="acts"><button class="btn sm ${c.joined?'':'primary'}" data-act="join" data-id="${c.id}">${c.joined?'დატოვება':'შეუერთდი'}</button></div>
+      </article>`).join('')}
+      <form class="card" id="cform" style="background:var(--sunk)">
+        <span class="label">შექმენი შენი კონტექსტი</span>
+        <label class="f">სახელი<input type="text" id="c-name" required placeholder="მაგ.: საბავშვო წიგნის კვირეული ვაკეში"></label>
+        <label class="f">რას ეძებ და ვის იწვევ<textarea id="c-desc" placeholder="მოკლედ: რა გინდა შექმნათ და ვინ გჭირდებათ"></textarea></label>
+        <div class="toggles have" id="c-sph">${Object.entries(SPH).map(([k,s])=>`<button type="button" data-act="ctx-sph" data-k="${k}" aria-pressed="false">${s.n}</button>`).join('')}</div>
+        <button class="btn primary" type="submit">კონტექსტის გამოქვეყნება</button>
+      </form>
+    </div>
+  </section>`;
+}
+
+function renderProfile(){
+  if(!draft) draft=JSON.parse(JSON.stringify(me));
+  const d=draft;
+  const conn=connections.map(c=>{const o=byId(c.id);const st={letter:['მიწერა გაგზავნილია',''],coffee:['ყავა დაგეგმილია','coffee'],idea:['იდეაზე შეერთების მოთხოვნა','idea'],blind:['ბრმა ყავა','coffee']}[c.mode];
+    return `<div class="conn"><b>${esc(o.name)}</b><span class="status ${st[1]}">${st[0]}</span><small style="color:var(--muted);margin-left:auto">${esc(c.note||'')}</small></div>`}).join('');
+  return `<section class="prof">
+    <form class="form" id="pform">
+      <div style="display:grid;gap:6px"><h2>შექმენი შენი გვერდი</h2><p style="color:var(--muted)">შეავსე ერთხელ — ამის მიხედვით აგირჩევს Connect პარტნიორებს. მარჯვნივ ჩანს, როგორ დაინახავენ სხვები.</p></div>
+      <div class="two">
+        <label class="f">ორგანიზაციის სახელი<input type="text" id="p-name" value="${esc(d.name)}"></label>
+        <label class="f">ტიპი<input type="text" id="p-type" value="${esc(d.type)}"></label>
+      </div>
+      <div class="two">
+        <label class="f">უბანი<select id="p-hood">${Object.keys(HOODS).map(h=>`<option ${h===d.hood?'selected':''}>${h}</option>`).join('')}</select></label>
+        <label class="f">ფარული რესურსი <small>არასავალდებულო</small><input type="text" id="p-hidden" value="${esc(d.hidden||'')}" placeholder="მაგ.: დარბაზი პარასკევს საღამოს"></label>
+      </div>
+      <div class="f" style="display:grid;gap:6px;font-weight:600;font-size:.9rem">სფეროები<div class="toggles have">${Object.entries(SPH).map(([k,s])=>`<button type="button" data-act="p-sph" data-k="${k}" aria-pressed="${d.spheres.includes(k)}">${s.n}</button>`).join('')}</div></div>
+      <label class="f">რას ვაკეთებთ<textarea id="p-does">${esc(d.does)}</textarea></label>
+      <label class="f">ჩვენი მიზანი <small>რა გვინდა შევცვალოთ ან მივაღწიოთ</small><textarea id="p-vision">${esc(d.vision)}</textarea></label>
+      <div style="display:grid;gap:6px;font-weight:600;font-size:.9rem">რას ვთავაზობთ <small style="font-weight:400;color:var(--muted)">ჩვენი რესურსი</small><div class="toggles have">${TAGS.map(t=>`<button type="button" data-act="p-tag" data-w="haves" data-t="${t}" aria-pressed="${d.haves.includes(t)}">${t}</button>`).join('')}</div></div>
+      <div style="display:grid;gap:6px;font-weight:600;font-size:.9rem">რა გვჭირდება<div class="toggles need">${TAGS.map(t=>`<button type="button" data-act="p-tag" data-w="needs" data-t="${t}" aria-pressed="${d.needs.includes(t)}">${t}</button>`).join('')}</div></div>
+      <div class="two">
+        <label class="f">იდეის ბარათი<input type="text" id="p-idea" value="${esc(d.ideas[0]?.t||'')}" placeholder="იდეის სათაური"></label>
+        <label class="f">ვის ვეძებთ ამ იდეისთვის<input type="text" id="p-ineed" value="${esc(d.ideas[0]?.need||'')}"></label>
+      </div>
+      <div class="row"><button class="btn primary" type="submit">შენახვა და შეთავაზებების განახლება</button><button class="btn ghost" type="button" data-act="p-reset">საწყისი მაგალითი</button></div>
+      <div class="panel" style="padding:18px"><span class="label">ჩემი კავშირები</span>${conn||'<p style="color:var(--muted)">ჯერ არცერთი. დაიწყე „Connect გთავაზობს“ გვერდიდან.</p>'}</div>
+    </form>
+    <div class="sticky" id="preview">${visionPage(d,true)}</div>
+  </section>`;
+}
+
+/* ---------- modal ---------- */
+
+let cupIdx=0, cafeIdx=0, scanned=false, scanning=false, phoneTab='idea';
+const CAFES=[{name:'Connect Coffee · ვერა',x:452,y:300},{name:'Connect Coffee · ავლაბარი',x:650,y:372},{name:'კაფე „დილის ფანჯარა“ · პარტნიორი',x:566,y:276}];
+const POOL=()=>ORGS.flatMap(o=>o.ideas.map(i=>({o,i})));
+function hereNow(k){const c=CAFES[k];const mins=[6,14,23,38],tables=[3,5,8,2];return ORGS.filter(o=>o.id!=='o9'||k!==2).map(o=>({o,d:Math.hypot(o.x-c.x,o.y-c.y)})).sort((a,b)=>a.d-b.d).slice(0,4).map((x,i)=>({o:x.o,min:mins[i],table:tables[i]}))}
+let modal=null;
+function openOrg(id){modal={kind:'org',id};drawModal()}
+function openConnect(id,mode){const days=nextWorkdays(3);modal={kind:'connect',id,mode,slot:null,place:COFFEES[0].name,idea:0,days};drawModal()}
+function letterText(o){
+  const m=match(me,o);
+  const why=[];
+  if(m.give.length) why.push(`თქვენი შეთავაზება (${m.give.join(', ')}) ჩვენ გვჭირდება`);
+  if(m.get.length) why.push(`ჩვენი რესურსი (${m.get.join(', ')}) თქვენ გამოგადგებათ`);
+  if(!why.length) why.push('ჩვენი სფეროები და მიზნები ერთმანეთს ავსებს');
+  return `გამარჯობა, ${o.name}!\n\nგწერთ ${me.name}-დან (${me.hood}). Connect-მა შეგვახვედრა, რადგან ${why.join(', ხოლო ')}.\n\nგვაქვს იდეა: „${m.idea.t}“ — ${m.idea.x}\n\nხომ არ დალევდით ჩვენთან ერთად ყავას Connect Coffee-ში? 30 წუთი საკმარისი იქნება.\n\nპატივისცემით,\n${me.name}`;
+}
+function drawModal(){
+  const L=$('#layer');
+  if(!modal){L.innerHTML='';document.body.style.overflow='';return}
+  document.body.style.overflow='hidden';
+  const o=byId(modal.id);
+  let title,body;
+  if(modal.kind==='org'){title=o.name;body=visionPage(o,false)}
+  else{
+    title='დაკავშირება: '+o.name;
+    const tabs=[['letter','მიწერა'],['coffee','ყავაზე დაპატიჟება'],['idea','იდეაზე შეერთება']];
+    let inner='';
+    if(modal.mode==='letter') inner=`<label class="f">წერილის მონახაზი <small>Connect-მა მოამზადა, შეგიძლია შეცვალო</small><textarea id="m-letter" style="min-height:240px">${esc(letterText(o))}</textarea></label>`;
+    if(modal.mode==='coffee') inner=`<label class="f">სად<select id="m-place">${[...COFFEES.map(c=>c.name),'ონლაინ შეხვედრა'].map(p=>`<option ${p===modal.place?'selected':''}>${p}</option>`).join('')}</select></label>
+      <div style="display:grid;gap:8px"><span class="label">შემოთავაზებული დრო · 30 წუთი</span><div class="slots">${modal.days.flatMap(d=>['10:00','13:00','17:30'].map(t=>{const k=dlabel(d)+', '+t;return `<button type="button" data-act="slot" data-k="${k}" aria-pressed="${modal.slot===k}">${k}</button>`})).join('')}</div></div>`;
+    if(modal.mode==='idea') inner=`<div style="display:grid;gap:8px"><span class="label">რომელ იდეას უერთდები</span>${o.ideas.map((i,ix)=>`<label class="idea" style="cursor:pointer;grid-template-columns:auto 1fr;gap:10px;align-items:start"><input type="radio" name="m-idea" value="${ix}" ${ix===modal.idea?'checked':''}><span><strong>${esc(i.t)}</strong><br><small style="color:var(--muted)">ეძებენ: ${esc(i.need)}</small></span></label>`).join('')}</div>
+      <label class="f">რით შეგიძლიათ დახმარება<textarea id="m-help">${esc('ჩვენი რესურსი: '+me.haves.join(', ')+'. ')}</textarea></label>`;
+    body=`<div class="seg" role="group" aria-label="დაკავშირების გზა">${tabs.map(([k,n])=>`<button data-act="cmode" data-m="${k}" aria-pressed="${modal.mode===k}">${n}</button>`).join('')}</div>${inner}
+      <div class="row"><button class="btn primary" data-act="send">${modal.mode==='coffee'?'დაპატიჟება':modal.mode==='idea'?'მოთხოვნის გაგზავნა':'გაგზავნა'}</button><button class="btn ghost" data-act="close">გაუქმება</button></div>`;
+  }
+  L.innerHTML=`<div class="overlay" data-act="close-bg"><div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="modal-head"><h3>${esc(title)}</h3><button class="x" data-act="close" aria-label="დახურვა">×</button></div><div class="modal-body">${body}</div></div></div>`;
+  L.querySelector('.modal .x').focus();
+}
+let toastT;
+function toast(t){let el=$('.toast');if(!el){el=document.createElement('div');el.className='toast';el.setAttribute('role','status');document.body.appendChild(el)}el.textContent=t;clearTimeout(toastT);toastT=setTimeout(()=>el.remove(),2600)}
+
+/* ---------- render + events ---------- */
+function render(){
+  renderNav();
+  const v={home:renderHome,feed:renderFeed,map:renderMap,match:renderMatch,search:renderSearch,contexts:renderContexts,profile:renderProfile}[view]||renderHome;
+  $('#view').innerHTML=v();
+}
+function go(v){view=v;if(v!=='profile')draft=null;try{history.replaceState(null,'','#'+v)}catch(e){}render();window.scrollTo({top:0,behavior:'instant'})}
+
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');if(!el)return;
+  const a=el.dataset.act;
+  if(a==='close-bg'&&e.target!==el)return;
+  if(el.tagName==='INPUT')return; // checkboxes handled on change
+  switch(a){
+    case 'nav':modal=null;drawModal();go(el.dataset.v);break;
+    case 'sph':{const k=el.dataset.k;sphereFilter.has(k)?sphereFilter.delete(k):sphereFilter.add(k);render();break}
+    case 'sph-clear':sphereFilter.clear();render();break;
+    case 'feed-mode':feedMode=el.dataset.m;render();break;
+    case 'radius':radius=+el.dataset.r;render();break;
+    case 'open-org':openOrg(el.dataset.id);break;
+    case 'connect':openConnect(el.dataset.id,el.dataset.m);break;
+    case 'cmode':modal.mode=el.dataset.m;drawModal();break;
+    case 'slot':modal.slot=el.dataset.k;drawModal();break;
+    case 'close':case 'close-bg':modal=null;drawModal();break;
+    case 'send':{
+      const o=byId(modal.id);let note='';
+      if(modal.mode==='coffee'){if(!modal.slot){toast('აირჩიე შეხვედრის დრო');return}note=modal.slot+' · '+($('#m-place')?.value||'')}
+      if(modal.mode==='idea'){const r=document.querySelector('input[name="m-idea"]:checked');note='„'+o.ideas[r?+r.value:0].t+'“'}
+      connections=connections.filter(c=>c.id!==o.id);connections.push({id:o.id,mode:modal.mode,note});
+      modal=null;drawModal();render();
+      toast(`გაიგზავნა: ${o.name} — პასუხს „შენს გვერდზე“ ნახავ`);break}
+    case 'scan':if(scanning)return;scanning=true;render();setTimeout(()=>{scanning=false;scanned=true;phoneTab='idea';render()},900);break;
+    case 'nextcup':cupIdx++;scanned=false;render();break;
+    case 'cafe':cafeIdx=+el.dataset.i;scanned=false;render();break;
+    case 'ptab':phoneTab=el.dataset.k;render();break;
+    case 'wave':{const o=byId(el.dataset.id);connections=connections.filter(c=>c.id!==o.id);connections.push({id:o.id,mode:'coffee',note:'აქვე, მაგიდა '+el.dataset.t+' · '+CAFES[cafeIdx].name});toast(`${o.name} მიიღებს შეტყობინებას: მაგიდა 6-დან გესალმებიან`);break}
+    case 'dismiss':dismissed.add(el.dataset.id);render();break;
+    case 'undismiss':dismissed.clear();render();break;
+    case 'blind':{const pool=ranked().filter(m=>!m.o.spheres.some(s=>me.spheres.includes(s))).slice(0,6);const pick=pool[Math.floor(Math.random()*pool.length)]||ranked()[0];blind={id:pick.o.id};render();break}
+    case 'blind-ok':connections=connections.filter(c=>c.id!==blind.id);connections.push({id:blind.id,mode:'blind',note:dlabel(nextThursday())+', 10:00 · Connect Coffee · ვერა'});toast('ბრმა ყავა დაჯავშნილია');blind=null;render();break;
+    case 'ex':query=el.dataset.q;render();break;
+    case 'join':{const c=contexts.find(x=>x.id===el.dataset.id);c.joined=!c.joined;c.members+=c.joined?1:-1;render();if(c.joined)toast('შეუერთდი: '+c.name);break}
+    case 'ctx-sph':el.setAttribute('aria-pressed',el.getAttribute('aria-pressed')!=='true');break;
+    case 'p-sph':{const k=el.dataset.k;draft.spheres=draft.spheres.includes(k)?draft.spheres.filter(x=>x!==k):[...draft.spheres,k];if(!draft.spheres.length)draft.spheres=[k];el.setAttribute('aria-pressed',draft.spheres.includes(k));refreshPreview();break}
+    case 'p-tag':{const w=el.dataset.w,t=el.dataset.t;draft[w]=draft[w].includes(t)?draft[w].filter(x=>x!==t):[...draft[w],t];el.setAttribute('aria-pressed',draft[w].includes(t));refreshPreview();break}
+    case 'p-reset':draft=JSON.parse(JSON.stringify(DEFAULT_ME));render();break;
+  }
+});
+document.addEventListener('change',e=>{
+  const el=e.target;
+  if(el.dataset.act==='layer'){layers[el.dataset.l]=el.checked;render()}
+  if(el.name==='m-idea'&&modal)modal.idea=+el.value;
+  if(el.id==='m-place'&&modal)modal.place=el.value;
+  if(el.id==='p-hood'&&draft){const [x,y]=HOODS[el.value];draft.hood=el.value;draft.x=x+18;draft.y=y+16;refreshPreview()}
+});
+document.addEventListener('input',e=>{
+  if(!draft)return;const id=e.target.id;
+  const map={'p-name':'name','p-type':'type','p-does':'does','p-vision':'vision','p-hidden':'hidden'};
+  if(map[id]){draft[map[id]]=e.target.value;refreshPreview()}
+  if(id==='p-idea'||id==='p-ineed'){draft.ideas=[{t:$('#p-idea').value,need:$('#p-ineed').value}].filter(i=>i.t);refreshPreview()}
+});
+document.addEventListener('submit',e=>{
+  e.preventDefault();
+  if(e.target.id==='sform'){query=$('#q').value.trim();render()}
+  if(e.target.id==='pform'){me=JSON.parse(JSON.stringify(draft));if(!me.hidden)delete me.hidden;save('connect-me',me);dismissed.clear();toast('გვერდი შენახულია — შეთავაზებები განახლდა');go('match')}
+  if(e.target.id==='cform'){
+    const name=$('#c-name').value.trim();if(!name){toast('დაწერე კონტექსტის სახელი');return}
+    const sp=[...document.querySelectorAll('#c-sph [aria-pressed="true"]')].map(b=>b.dataset.k);
+    contexts.unshift({id:'c'+Date.now(),name,hood:me.hood,desc:$('#c-desc').value.trim()||'ახალი კონტექსტი — შემოუერთდით და ერთად განვავითაროთ.',spheres:sp.length?sp:me.spheres,members:1,joined:true,by:me.name});
+    render();toast('კონტექსტი გამოქვეყნდა');
+  }
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&modal){modal=null;drawModal()}
+  if((e.key==='Enter'||e.key===' ')&&e.target.matches('g.pin')){e.preventDefault();e.target.dispatchEvent(new MouseEvent('click',{bubbles:true}))}
+});
+function refreshPreview(){const p=$('#preview');if(p)p.innerHTML=visionPage(draft,true)}
+
+const start=(location.hash||'').slice(1);
+if(VIEWS.some(([v])=>v===start))view=start;
+render();
+</script>
+
+</body>
+</html>
