@@ -221,6 +221,65 @@ label.f small{font-weight:400;color:var(--muted)}
 .role{display:grid;gap:8px;align-content:start}
 .role svg{width:56px;height:56px}
 .role p{color:var(--muted);font-size:.93rem}
+
+/* account */
+.acct{display:flex;align-items:center;gap:8px;flex:none}
+.who-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 12px 3px 3px;cursor:pointer;max-width:230px}
+.who-chip .av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--c,var(--blue));color:#fff;font-weight:700;font-size:.82rem;flex:none}
+.who-chip span.nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.86rem;font-weight:600}
+@media (max-width:1359px){.who-chip span.nm{display:none}.who-chip{padding:3px}}
+nav button{padding:8px 11px}
+@media (max-width:899px){.landing .mini-art{display:none}.landing{min-height:0}}
+
+/* landing */
+.landing{display:grid;gap:28px;align-items:center;min-height:calc(100vh - 180px)}
+@media (min-width:900px){.landing{grid-template-columns:1.05fr .95fr}}
+.auth{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:24px;display:grid;gap:16px;box-shadow:var(--shadow);max-width:460px;width:100%;justify-self:center}
+.auth form{display:grid;gap:12px}
+.auth input[type=email],.auth input[type=password]{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px}
+.auth .demo-acc{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:14px}
+.auth .demo-acc .row button{flex:1 1 160px}
+.note{font-size:.8rem;color:var(--muted)}
+.mini-art{max-width:340px}
+.mini-art svg{display:block;width:100%;height:auto}
+
+/* dashboard + admin */
+.tiles{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:grid;gap:4px;text-align:left}
+button.tile{cursor:pointer;font:inherit;color:inherit}
+button.tile:hover{border-color:var(--blue)}
+.tile b{font-family:var(--f-mono);font-size:1.7rem;font-weight:600;line-height:1.1}
+.tile small{color:var(--muted)}
+.tile.warn{border-color:color-mix(in srgb,var(--orange) 60%,var(--line));background:color-mix(in srgb,var(--orange) 8%,var(--surface))}
+.dash{display:grid;gap:16px}
+@media (min-width:980px){.dash{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:start}}
+.banner{border:1px solid color-mix(in srgb,var(--orange) 55%,var(--line));background:color-mix(in srgb,var(--orange) 10%,var(--surface));border-radius:14px;padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.banner p{flex:1 1 260px}
+.list{display:grid}
+.li{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line)}
+.li:first-child{border-top:0}
+.li .grow{flex:1 1 180px;min-width:0}
+.li small{color:var(--muted)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table.tbl{width:100%;border-collapse:collapse;font-size:.88rem;min-width:720px}
+.tbl th{text-align:left;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--sunk);white-space:nowrap}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td.acts{white-space:nowrap}
+.tbl td.acts .btn{margin-right:4px}
+.st{display:inline-block;font-size:.75rem;padding:2px 9px;border-radius:999px;white-space:nowrap;background:color-mix(in srgb,var(--green) 16%,transparent)}
+.st.pending{background:color-mix(in srgb,var(--orange) 20%,transparent)}
+.st.suspended{background:color-mix(in srgb,#c0453a 18%,transparent)}
+.st.hidden{background:var(--sunk);color:var(--muted)}
+.st.info{background:color-mix(in srgb,var(--blue) 14%,transparent)}
+.bars{display:grid;gap:8px}
+.bars .b{display:grid;grid-template-columns:150px 1fr 34px;gap:10px;align-items:center;font-size:.86rem}
+.bars .b i{display:block;height:10px;border-radius:99px;background:var(--c)}
+.bars .b .t{height:10px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.bars .b .num{text-align:right}
+@media (max-width:520px){.bars .b{grid-template-columns:110px 1fr 28px}}
+.admin-tabs{overflow-x:auto;max-width:100%}
+.admin-tabs button{white-space:nowrap}
 </style>
 
 <header class="bar">
@@ -237,6 +296,7 @@ label.f small{font-weight:400;color:var(--muted)}
       <b>Connect</b>
     </button>
     <nav id="nav" aria-label="გვერდები"></nav>
+    <div class="acct" id="acct"></div>
   </div>
 </header>
 <main id="view" class="view"></main>
@@ -353,7 +413,29 @@ const ORGS = [
   haves:['დაფინანსება','მარკეტინგი'],needs:['მოხალისეები','ღონისძიება','აუდიტორია'],
   ideas:[{t:'უბნის იდეების კონკურსი',need:'მოხალისეები, სივრცე'}],formats:['საგრანტო კონსორციუმი','გრძელვადიანი პროექტი']}
 ];
+ORGS.push(
+ {id:'o19',name:'ბიბლიოთეკა „წიგნის სახლი“',type:'უბნის ბიბლიოთეკა',spheres:['culture','edu'],hood:'ვერა',x:388,y:316,status:'pending',
+  does:'12 000 წიგნი, საკითხავი დარბაზი და კვირის კითხვის კლუბები ბავშვებისთვის.',
+  vision:'ბიბლიოთეკა უბნის ცოცხალი სივრცე უნდა იყოს და არა მხოლოდ წიგნების საცავი.',
+  haves:['სივრცე','დარბაზი'],needs:['ბავშვები','ღონისძიება','მოხალისეები'],
+  ideas:[{t:'კითხვის საღამოები ოჯახებისთვის',need:'სკოლები, მოხალისეები'}],formats:['გრძელვადიანი პროექტი']},
+ {id:'o20',name:'ველოკლუბი „ორი ბორბალი“',type:'სპორტული კლუბი',spheres:['health','eco'],hood:'საბურთალო',x:150,y:270,status:'pending',
+  does:'ქალაქის ველოტურები და უსაფრთხო ტარების სწავლება მოზარდებისთვის.',
+  vision:'ველოსიპედი ქალაქში ყოველდღიური და უსაფრთხო გადაადგილების საშუალება უნდა გახდეს.',
+  haves:['სპორტი','გიდი'],needs:['მოსწავლეები','მარკეტინგი'],
+  ideas:[{t:'ველოსიპედით სკოლაში',need:'სკოლები, მშობლები'}],formats:['ერთჯერადი ღონისძიება']}
+);
+ORGS.forEach((o,i)=>{o.status=o.status||'active';o.joinedAt=new Date(2026,7,18+i*3)});
 const PARTNERS = [['o1','o2'],['o9','o10'],['o12','o11'],['o14','o18'],['o7','o8']];
+const SEED_CONN = [
+  {from:'o4',to:'o3',mode:'idea',state:'მოლოდინში',note:'„სასკოლო ბუნების ბილიკები“'},
+  {from:'o12',to:'o11',mode:'coffee',state:'შეხვედრა დაგეგმილია',note:'Connect Coffee · ავლაბარი'},
+  {from:'o16',to:'o4',mode:'letter',state:'პასუხი მიღებულია',note:''},
+  {from:'o17',to:'o9',mode:'idea',state:'მოლოდინში',note:'„ტარის დაბრუნების წრე“'},
+  {from:'o1',to:'o3',mode:'coffee',state:'შეხვედრა დაგეგმილია',note:'Connect Coffee · ვერა'},
+  {from:'o13',to:'o17',mode:'letter',state:'მოლოდინში',note:''}
+];
+const MODE_N = {letter:'მიწერა',coffee:'ყავაზე დაპატიჟება',idea:'იდეაზე შეერთება',blind:'ბრმა ყავა'};
 
 const IDEAS = {
  'biz|travel':['გემოს მარშრუტი','სტუმრები ერთ დღეში ნახულობენ მწარმოებელს, აგემოვნებენ პროდუქტს და თან მიაქვთ. ერთი მხარე სტუმრებს აწვდის, მეორე — გამოცდილებას.'],
@@ -381,8 +463,32 @@ const DEFAULT_ME = {id:'me',name:'სასწავლო ცენტრი �
   does:'დამატებითი განათლება 8–15 წლის მოსწავლეებისთვის: საბუნებისმეტყველო წრეები და კვლევითი პროექტები.',
   vision:'გვინდა ყველა ბავშვმა ერთხელ მაინც ნამდვილი კვლევა ჩაატაროს — ლაბორატორიაში, ქალაქში, ბუნებაში.',
   haves:['დარბაზი','ექსპერტიზა','მოსწავლეები'],needs:['ბუნება','გიდი','ექსპონატები','დაფინანსება'],
-  ideas:[{t:'ბუნების კვლევითი კლუბი',need:'გიდები, მუზეუმები, ფონდი'}],formats:['გრძელვადიანი პროექტი','საგრანტო კონსორციუმი']};
-let me = load('connect-me') || JSON.parse(JSON.stringify(DEFAULT_ME));
+  ideas:[{t:'ბუნების კვლევითი კლუბი',need:'გიდები, მუზეუმები, ფონდი'}],formats:['გრძელვადიანი პროექტი','საგრანტო კონსორციუმი'],
+  email:'nabiji@connect.ge',status:'active',joinedAt:'2026-08-12'};
+const ADMIN_EMAIL='admin@connect.ge';
+/* accounts: email → organization page (prototype; passwords are not stored or checked) */
+let accounts = load('connect-accounts') || {};
+if(!accounts[DEFAULT_ME.email]) accounts[DEFAULT_ME.email]=JSON.parse(JSON.stringify(DEFAULT_ME));
+let session = load('connect-session');
+let me = (session&&session.role==='org'&&accounts[session.email]) ? accounts[session.email] : JSON.parse(JSON.stringify(DEFAULT_ME));
+let authTab = 'login';
+let adminTab = 'overview', adminQ = '', adminStatus = 'all';
+const nowLabel = (d=new Date()) => `${d.getDate()} ${MO[d.getMonth()]}, ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+let activity = load('connect-log') || [
+  {t:'19 ოქტ, 18:40',who:'რესტორანი „სეზონი“',what:'ყავაზე დაპატიჟა ფერმერთა კოოპერატივი „კახური ბაღი“'},
+  {t:'19 ოქტ, 16:05',who:'ბიბლიოთეკა „წიგნის სახლი“',what:'დარეგისტრირდა — ელოდება დადასტურებას'},
+  {t:'19 ოქტ, 11:22',who:'სკოლა „ახალი ფურცელი“',what:'შეუერთდა იდეას „სასკოლო ბუნების ბილიკები“'},
+  {t:'18 ოქტ, 20:10',who:'ველოკლუბი „ორი ბორბალი“',what:'დარეგისტრირდა — ელოდება დადასტურებას'},
+  {t:'18 ოქტ, 14:47',who:'დიზაინ სტუდია „ხაზი“',what:'შექმნა კონტექსტი „ქალაქის ავეჯი მეორადი მასალით“'},
+  {t:'17 ოქტ, 09:30',who:'კაფე „დილის ფანჯარა“',what:'შექმნა კონტექსტი „უბნის საშემოდგომო ფესტივალი“'}
+];
+function logAct(who,what){activity.unshift({t:nowLabel(),who,what});activity=activity.slice(0,60);save('connect-log',activity)}
+const adminSaved = load('connect-admin') || {};
+ORGS.forEach(o=>{if(adminSaved.status&&adminSaved.status[o.id])o.status=adminSaved.status[o.id]});
+function saveAdmin(){const st={};ORGS.forEach(o=>st[o.id]=o.status);save('connect-admin',{status:st,hiddenIdeas:[...hiddenIdeas],hiddenCtx:contexts.filter(c=>c.hidden).map(c=>c.id)})}
+let hiddenIdeas = new Set(adminSaved.hiddenIdeas||[]);
+const isOrg = () => session?.role==='org';
+const isAdmin = () => session?.role==='admin';
 let draft = null;
 let view = 'home';
 let sphereFilter = new Set();
@@ -399,6 +505,8 @@ let contexts = [
   {id:'c3',name:'ქალაქის ავეჯი მეორადი მასალით',hood:'ვერა, ისანი',desc:'დიზაინერები და გადამამუშავებლები სკამებს და ჩრდილებს ქმნიან ნარჩენი მასალისგან.',spheres:['eco','biz','culture'],members:6,joined:false,by:'დიზაინ სტუდია „ხაზი“'},
   {id:'c4',name:'ადრეული განათლების კონსორციუმი',hood:'საქართველო',desc:'ბაღები, უნივერსიტეტები და ფსიქოლოგები ერთად ემზადებიან საერთაშორისო საგრანტო კონკურსისთვის.',spheres:['edu','health'],members:4,joined:false,by:'სტუდენტური ლაბორატორია „ცნობისმოყვარეობა“'}
 ];
+
+(adminSaved.hiddenCtx||[]).forEach(id=>{const c=contexts.find(x=>x.id===id);if(c)c.hidden=true});
 
 function load(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
@@ -439,9 +547,12 @@ function match(a,b){
   if(d<3) reasons.push(`ახლოს ხართ — ${km(d)}`);
   return {o:b,s,pct:Math.min(97,Math.round(s/17*100)),give,get,d,reasons,idea:ideaFor(a,b)};
 }
-function ranked(){return ORGS.map(o=>match(me,o)).sort((x,y)=>y.s-x.s)}
+function ranked(){return ORGS.filter(o=>o.status==='active').map(o=>match(me,o)).sort((x,y)=>y.s-x.s)}
 function suggestions(n){const done=new Set(connections.map(c=>c.id));return ranked().filter(m=>!dismissed.has(m.o.id)&&!done.has(m.o.id)).slice(0,n)}
-function passes(o){return !sphereFilter.size||o.spheres.some(s=>sphereFilter.has(s))}
+function passes(o){return (isAdmin()||o.status==='active')&&(!sphereFilter.size||o.spheres.some(s=>sphereFilter.has(s)))}
+const ideaOn=(o,ix)=>isAdmin()||!hiddenIdeas.has(o.id+':'+ix);
+const ST_N={active:'აქტიური',pending:'ელოდება დადასტურებას',suspended:'შეჩერებული'};
+const stBadge=o=>`<span class="st ${o.status==='active'?'':o.status}">${ST_N[o.status]||o.status}</span>`;
 
 function qrSvg(seed,size=96){
   let h=2166136261;for(const ch of seed){h^=ch.codePointAt(0);h=Math.imul(h,16777619)}
@@ -457,7 +568,7 @@ function qrSvg(seed,size=96){
 }
 
 /* ---------- components ---------- */
-function connectBtns(o){return `<div class="acts">
+function connectBtns(o){if(isAdmin())return `<div class="acts">${stBadge(o)}<button class="btn sm" data-act="admin-org" data-id="${o.id}">მართვა პანელში</button></div>`;return `<div class="acts">
   <button class="btn sm blue" data-act="connect" data-id="${o.id}" data-m="letter">მიწერა</button>
   <button class="btn sm" data-act="connect" data-id="${o.id}" data-m="coffee">ყავაზე დაპატიჟება</button>
   <button class="btn sm" data-act="connect" data-id="${o.id}" data-m="idea">იდეაზე შეერთება</button></div>`}
@@ -467,12 +578,12 @@ function orgCard(o,extra=''){
   return `<article class="card">
     <div style="display:grid;gap:6px">
       <h3><button class="link" data-act="open-org" data-id="${o.id}">${esc(o.name)}</button></h3>
-      <div class="sub">${chips(o.spheres)}<span>· ${esc(o.hood)}</span><span class="num">· ${km(m.d)}</span></div>
+      <div class="sub">${chips(o.spheres)}<span>· ${esc(o.hood)}</span>${isOrg()?`<span class="num">· ${km(m.d)}</span>`:''}</div>
     </div>
     <p class="desc">${esc(o.does)}</p>
     ${extra}
-    <div class="kv"><span class="label">სთავაზობენ</span><div class="tags">${tags(o.haves,'have',me.needs)}</div></div>
-    <div class="kv"><span class="label">სჭირდებათ</span><div class="tags">${tags(o.needs,'need',me.haves)}</div></div>
+    <div class="kv"><span class="label">სთავაზობენ</span><div class="tags">${tags(o.haves,'have',isOrg()?me.needs:[])}</div></div>
+    <div class="kv"><span class="label">სჭირდებათ</span><div class="tags">${tags(o.needs,'need',isOrg()?me.haves:[])}</div></div>
     ${o.hidden&&layers.hidden?`<p class="desc"><span class="badge">ფარული რესურსი</span> ${esc(o.hidden)}</p>`:''}
     ${connectBtns(o)}
   </article>`;
@@ -484,7 +595,7 @@ function ideaCard(o,i){
     <div class="sub">${chips(o.spheres)}</div>
     <p class="desc">ავტორი: <button class="link" data-act="open-org" data-id="${o.id}"><b>${esc(o.name)}</b></button> · ${esc(o.hood)}</p>
     <div class="idea"><span class="label">ეძებენ</span><p>${esc(i.need)}</p></div>
-    <div class="acts"><button class="btn sm primary" data-act="connect" data-id="${o.id}" data-m="idea">შევუერთდე იდეას</button><button class="btn sm" data-act="connect" data-id="${o.id}" data-m="coffee">ყავაზე განვიხილოთ</button></div>
+    ${isAdmin()?'':`<div class="acts"><button class="btn sm primary" data-act="connect" data-id="${o.id}" data-m="idea">შევუერთდე იდეას</button><button class="btn sm" data-act="connect" data-id="${o.id}" data-m="coffee">ყავაზე განვიხილოთ</button></div>`}
   </article>`;
 }
 function sugCard(m,full=true){
@@ -505,7 +616,7 @@ function visionPage(o,isMe){
     <div class="vp-head">
       <div class="who"><span class="label">ორგანიზაციის გვერდი</span><h2>${esc(o.name)||'ორგანიზაციის სახელი'}</h2>
         <div class="sub row" style="gap:6px">${chips(o.spheres)}</div>
-        <p class="desc" style="color:var(--muted)">${esc(o.type)} · ${esc(o.hood)} <span class="verified">· დადასტურებული</span></p></div>
+        <p class="desc" style="color:var(--muted)">${esc(o.type)} · ${esc(o.hood)} ${o.status==='pending'?'<span class="st pending">ელოდება დადასტურებას</span>':o.status==='suspended'?'<span class="st suspended">შეჩერებული</span>':'<span class="verified">· დადასტურებული</span>'}</p></div>
       <div style="display:grid;gap:4px;justify-items:center">${qrSvg(o.name||'x',92)}<small style="color:var(--muted);font-size:.72rem">დაასკანერე და დაუკავშირდი</small></div>
     </div>
     <div class="vp-body">
@@ -515,7 +626,7 @@ function visionPage(o,isMe){
         <section><span class="label">რას ვთავაზობთ</span><div class="tags">${tags(o.haves,'have')||'<small>—</small>'}</div></section>
         <section><span class="label">რა გვჭირდება</span><div class="tags">${tags(o.needs,'need')||'<small>—</small>'}</div></section>
       </div>
-      ${o.ideas?.length?`<section><span class="label">იდეები, რომლებზეც პარტნიორს ვეძებთ</span>${o.ideas.map(i=>`<div class="idea"><strong>${esc(i.t)}</strong><p>ვეძებთ: ${esc(i.need)}</p></div>`).join('')}</section>`:''}
+      ${o.ideas?.length?`<section><span class="label">იდეები, რომლებზეც პარტნიორს ვეძებთ</span>${o.ideas.filter((i,ix)=>isMe||ideaOn(o,ix)).map(i=>`<div class="idea"><strong>${esc(i.t)}</strong><p>ვეძებთ: ${esc(i.need)}</p></div>`).join('')}</section>`:''}
       ${o.hidden?`<section><span class="label">ფარული რესურსი</span><p>${esc(o.hidden)}</p></section>`:''}
       <section><span class="label">თანამშრომლობის ფორმატი</span><div class="tags">${(o.formats||[]).map(f=>`<span class="tag">${esc(f)}</span>`).join('')}</div></section>
       ${isMe?'':connectBtns(o)}
@@ -523,8 +634,20 @@ function visionPage(o,isMe){
 }
 
 /* ---------- views ---------- */
-const VIEWS = [['home','მთავარი'],['feed','საერთო სივრცე'],['map','რუკა'],['match','Connect გთავაზობს'],['search','ძებნა'],['contexts','კონტექსტები'],['profile','შენი გვერდი']];
-function renderNav(){$('#nav').innerHTML=VIEWS.map(([v,n])=>`<button data-act="nav" data-v="${v}" ${v===view?'aria-current="page"':''}>${n}</button>`).join('')}
+function views(){
+  if(isAdmin()) return [['admin','ადმინისტრატორის პანელი'],['feed','საერთო სივრცე'],['map','რუკა'],['search','ძებნა'],['contexts','კონტექსტები'],['about','ინფორმაცია']];
+  if(isOrg()) return [['home','მთავარი'],['feed','საერთო სივრცე'],['map','რუკა'],['match','Connect გთავაზობს'],['search','ძებნა'],['contexts','კონტექსტები'],['profile','შენი გვერდი'],['about','ინფორმაცია']];
+  return [['home','მთავარი'],['about','ინფორმაცია'],['feed','საერთო სივრცე'],['map','რუკა'],['search','ძებნა'],['contexts','კონტექსტები']];
+}
+function initial(n){const m=String(n||'').match(/„(.)/);return (m?m[1]:String(n||'?').trim()[0]||'?')}
+function renderNav(){
+  $('#nav').innerHTML=views().map(([v,n])=>`<button data-act="nav" data-v="${v}" ${v===view?'aria-current="page"':''}>${n}</button>`).join('');
+  $('#acct').innerHTML = isOrg()
+    ? `<button class="who-chip" data-act="nav" data-v="profile" title="${esc(me.name)}" style="--c:${SPH[me.spheres[0]]?.c||'var(--blue)'}"><span class="av">${esc(initial(me.name))}</span><span class="nm">${esc(me.name)}</span></button><button class="btn sm ghost" data-act="logout">გასვლა</button>`
+    : isAdmin()
+    ? `<button class="who-chip" data-act="nav" data-v="admin" style="--c:var(--primary)"><span class="av">ა</span><span class="nm">ადმინისტრატორი</span></button><button class="btn sm ghost" data-act="logout">გასვლა</button>`
+    : `<button class="btn sm primary" data-act="login">შესვლა</button>`;
+}
 function sphereFilters(){return `<div class="filters">${Object.entries(SPH).map(([k,s])=>`<button class="fchip" style="--c:${s.c}" data-act="sph" data-k="${k}" aria-pressed="${sphereFilter.has(k)}">${s.n}</button>`).join('')}${sphereFilter.size?`<button class="fchip" data-act="sph-clear">ყველა</button>`:''}</div>`}
 
 function networkArt(){
@@ -547,18 +670,19 @@ function networkArt(){
   </svg>`;
 }
 
-function renderHome(){
-  const ideasN=ORGS.reduce((a,o)=>a+o.ideas.length,0);
-  const top=suggestions(3);
+function renderAbout(){
+  const top=isOrg()?suggestions(3):[];
   const bd=nextThursday();
   return `
   <section class="hero">
     <div class="hero-text">
-      <p class="eyebrow">Connect · ორგანიზაციების ქსელი</p>
+      <p class="eyebrow">ინფორმაცია · როგორ მუშაობს Connect</p>
       <h1>აღმოაჩინე შენი პარტნიორი.<br>შექმენით ერთად.</h1>
       <p class="lead">სკოლა, მუზეუმი, სასტუმრო, კაფე, ფონდი თუ სახელოსნო — აღწერე ვინ ხარ და რა იდეა გაქვს. Connect გიპოვის ორგანიზაციას, რომელთანაც საერთო პროდუქტს შექმნი.</p>
-      <div class="row"><button class="btn primary" data-act="nav" data-v="profile">შექმენი შენი გვერდი</button><button class="btn" data-act="nav" data-v="map">ნახე რუკაზე</button><button class="btn ghost" data-act="nav" data-v="match">ჩემი შეთავაზებები</button></div>
-      <p class="meta"><span class="num">${ORGS.length}</span> ორგანიზაცია · <span class="num">${ideasN}</span> ღია იდეა · <span class="num">${contexts.length}</span> კონტექსტი · <span class="num">8</span> სფერო</p>
+      <div class="row">${isOrg()?`<button class="btn primary" data-act="nav" data-v="profile">შენი გვერდი</button><button class="btn" data-act="nav" data-v="map">ნახე რუკაზე</button><button class="btn ghost" data-act="nav" data-v="match">ჩემი შეთავაზებები</button>`
+        :isAdmin()?`<button class="btn primary" data-act="nav" data-v="admin">ადმინისტრატორის პანელი</button><button class="btn" data-act="nav" data-v="map">ნახე რუკაზე</button>`
+        :`<button class="btn primary" data-act="register">შექმენი შენი გვერდი</button><button class="btn" data-act="nav" data-v="map">ნახე რუკაზე</button><button class="btn ghost" data-act="login">შესვლა</button>`}</div>
+      <p class="meta">${statsLine()}</p>
     </div>
     <div class="hero-art">${networkArt()}</div>
   </section>
@@ -573,26 +697,190 @@ function renderHome(){
     </div>
   </section>
 
-  <section>
+  ${isOrg()?`<section>
     <div class="section-head"><div style="display:grid;gap:6px"><h2>ამ კვირის შეთავაზებები</h2><p>შერჩეულია თქვენი გვერდისა და არსებული ბაზის მიხედვით</p></div><button class="btn sm" data-act="nav" data-v="match">ყველა შეთავაზება</button></div>
     <div class="grid">${top.map(m=>sugCard(m,false)).join('')}</div>
-  </section>
+  </section>`:''}
 
   <section class="split">
     <div class="panel coffee">
       <span class="label">ბრმა ყავა</span>
       <h2>30 წუთი უცნობ ორგანიზაციასთან</h2>
       <p style="color:var(--muted)">ყოველ კვირას Connect ორ ორგანიზაციას სხვადასხვა სფეროდან არჩევს და Connect Coffee-ში ეპატიჟება. შემდეგი: <b>${dlabel(bd)}, 10:00</b>.</p>
-      ${blind?blindResult():`<div class="row"><button class="btn primary" data-act="blind">შემირჩიე წყვილი</button></div>`}
+      ${blindPanel()}
     </div>
     <div class="panel">
       <span class="label">QR ყველგან</span>
       <h2>ერთი კოდი — შენი გვერდი</h2>
-      <div class="qr-row">${qrSvg(me.name,104)}<p style="color:var(--muted);flex:1 1 220px">ყველა ორგანიზაციის გვერდს თავისი QR კოდი აქვს — კარზე, ვიტრინაზე, სავიზიტოზე ან ღონისძიების სტენდზე. დაასკანერე, ნახე ვინ არიან და ერთი ღილაკით დაუკავშირდი.</p></div>
+      <div class="qr-row">${qrSvg(isOrg()?me.name:'Connect',104)}<p style="color:var(--muted);flex:1 1 220px">ყველა ორგანიზაციის გვერდს თავისი QR კოდი აქვს — კარზე, ვიტრინაზე, სავიზიტოზე ან ღონისძიების სტენდზე. დაასკანერე, ნახე ვინ არიან და ერთი ღილაკით დაუკავშირდი.</p></div>
     </div>
   </section>
   <p class="demo">პროტოტიპი · ორგანიზაციები და მონაცემები სადემონსტრაციოა</p>`;
 }
+/* ---------- main page: entry for guests, workspace for organizations ---------- */
+function statsLine(){
+  const act=ORGS.filter(o=>o.status==='active');
+  const ideasN=act.reduce((a,o)=>a+o.ideas.filter((i,ix)=>!hiddenIdeas.has(o.id+':'+ix)).length,0);
+  return `<span class="num">${act.length}</span> ორგანიზაცია · <span class="num">${ideasN}</span> ღია იდეა · <span class="num">${contexts.filter(c=>!c.hidden).length}</span> კონტექსტი · <span class="num">8</span> სფერო`;
+}
+function blindPanel(){
+  if(isAdmin()) return `<p class="note">ბრმა ყავის წყვილები ადმინისტრატორის პანელის „შეხვედრების“ ჩანართში ჩანს.</p>`;
+  if(!isOrg()) return `<div class="row"><button class="btn primary" data-act="login">შედი და მიიღე მონაწილეობა</button></div>`;
+  return blind?blindResult():`<div class="row"><button class="btn primary" data-act="blind">შემირჩიე წყვილი</button></div>`;
+}
+function authBox(){
+  const login=authTab==='login';
+  return `<div class="auth" id="auth">
+    <div class="seg" role="group" aria-label="შესვლა ან რეგისტრაცია" style="justify-self:start"><button data-act="auth-tab" data-t="login" aria-pressed="${login}">შესვლა</button><button data-act="auth-tab" data-t="register" aria-pressed="${!login}">რეგისტრაცია</button></div>
+    ${login?`<div style="display:grid;gap:4px"><h3>ორგანიზაციის შესვლა</h3><p class="note">შედით ორგანიზაციის ელფოსტით.</p></div>
+    <form id="lform" novalidate>
+      <label class="f">ელფოსტა<input type="email" id="l-email" autocomplete="username" placeholder="info@organizacia.ge" required></label>
+      <label class="f">პაროლი<input type="password" id="l-pass" autocomplete="current-password" required></label>
+      <button class="btn primary" type="submit">შესვლა</button>
+    </form>`
+    :`<div style="display:grid;gap:4px"><h3>დაარეგისტრირე ორგანიზაცია</h3><p class="note">რეგისტრაციის შემდეგ შეავსებთ ორგანიზაციის გვერდს. გვერდი სხვებს ადმინისტრატორის დადასტურების შემდეგ გამოუჩნდებათ.</p></div>
+    <form id="rform" novalidate>
+      <label class="f">ორგანიზაციის სახელი<input type="text" id="r-name" required placeholder="მაგ.: სახელოსნო „ფიცარი“"></label>
+      <label class="f">ტიპი<input type="text" id="r-type" placeholder="მაგ.: ხის სახელოსნო"></label>
+      <label class="f">ელფოსტა<input type="email" id="r-email" autocomplete="username" required></label>
+      <label class="f">პაროლი<input type="password" id="r-pass" autocomplete="new-password" required></label>
+      <button class="btn primary" type="submit">რეგისტრაცია</button>
+    </form>`}
+    <div class="demo-acc"><span class="label">სადემონსტრაციო შესვლა</span>
+      <div class="row"><button class="btn sm" data-act="demo-login" data-r="org">ორგანიზაცია — „ნაბიჯი“</button><button class="btn sm" data-act="demo-login" data-r="admin">ადმინისტრატორი</button></div>
+      <p class="note">პროტოტიპია: პაროლი არ მოწმდება და არსად ინახება. ნამდვილი პაროლი არ შეიყვანოთ.</p></div>
+  </div>`;
+}
+function renderLanding(){
+  return `<section class="landing">
+    <div class="hero-text">
+      <p class="eyebrow">Connect · ორგანიზაციების ქსელი</p>
+      <h1>აღმოაჩინე შენი პარტნიორი.<br>შექმენით ერთად.</h1>
+      <p class="lead">სკოლა, მუზეუმი, სასტუმრო, კაფე, ფონდი თუ სახელოსნო — Connect გიპოვის ორგანიზაციას, რომელთანაც საერთო პროდუქტს შექმნი.</p>
+      <p class="meta">${statsLine()}</p>
+      <div class="row"><button class="btn" data-act="nav" data-v="about">როგორ მუშაობს</button><button class="btn ghost" data-act="nav" data-v="map">ნახე რუკაზე</button><button class="btn ghost" data-act="nav" data-v="feed">საერთო სივრცე</button></div>
+      <div class="mini-art">${networkArt()}</div>
+    </div>
+    ${authBox()}
+  </section>`;
+}
+function renderDashboard(){
+  const sugg=suggestions(2), all=suggestions(30), good=all.filter(m=>m.pct>=50).length;
+  const near=ORGS.filter(o=>o.status==='active'&&dist(me,o)<=2).length;
+  const myIdeas=ORGS.filter(o=>o.status==='active'&&o.spheres.some(s=>me.spheres.includes(s))).flatMap(o=>o.ideas.map((i,ix)=>({o,i,ix}))).filter(x=>!hiddenIdeas.has(x.o.id+':'+x.ix));
+  const joined=contexts.filter(c=>c.joined&&!c.hidden);
+  const conn=connections.map(c=>{const o=byId(c.id);return `<div class="li"><span class="dot" style="width:10px;height:10px;border-radius:50%;background:${SPH[o.spheres[0]].c};flex:none"></span><div class="grow"><b><button class="link" data-act="open-org" data-id="${o.id}">${esc(o.name)}</button></b><br><small>${MODE_N[c.mode]}${c.note?' · '+esc(c.note):''}</small></div><span class="st info">ელოდება პასუხს</span></div>`}).join('');
+  const fill=[me.name,me.type,me.does,me.vision,me.haves.length,me.needs.length,me.ideas.length,me.spheres.length].filter(Boolean).length;
+  const pct=Math.round(fill/8*100);
+  return `<section style="display:grid;gap:22px">
+    <div class="section-head" style="margin:0"><div style="display:grid;gap:6px"><p class="eyebrow">მთავარი · შენი სამუშაო სივრცე</p><h2>გამარჯობა, ${esc(me.name)}</h2></div>
+      <div class="row"><button class="btn sm" data-act="nav" data-v="profile">შენი გვერდი</button><button class="btn sm primary" data-act="nav" data-v="match">ყველა შეთავაზება</button></div></div>
+    ${me.status==='pending'?`<div class="banner"><p><b>გვერდი დადასტურებას ელოდება.</b> მანამდე სხვა ორგანიზაციები მას ვერ ხედავენ, თქვენ კი უკვე შეგიძლიათ შეავსოთ გვერდი და დაათვალიეროთ შეთავაზებები.</p><button class="btn sm" data-act="nav" data-v="profile">შეავსე გვერდი</button></div>`:''}
+    <div class="tiles">
+      <button class="tile" data-act="nav" data-v="match"><small>შესაფერისი პარტნიორები</small><b>${good}</b><small>დამთხვევა 50%-ზე მეტი</small></button>
+      <button class="tile" data-act="nav" data-v="profile"><small>ჩემი კავშირები</small><b>${connections.length}</b><small>გაგზავნილი მოთხოვნები</small></button>
+      <button class="tile" data-act="nav" data-v="feed"><small>ღია იდეები ჩემს სფეროებში</small><b>${myIdeas.length}</b><small>${me.spheres.map(s=>SPH[s].n).join(', ')}</small></button>
+      <button class="tile" data-act="nav" data-v="map"><small>ორგანიზაციები 2 კმ-ში</small><b>${near}</b><small>${esc(me.hood)}</small></button>
+      <button class="tile ${pct<100?'warn':''}" data-act="nav" data-v="profile"><small>გვერდის შევსება</small><b>${pct}%</b><small>${pct<100?'შეავსეთ, რომ შეთავაზებები გაუმჯობესდეს':'გვერდი სრულადაა შევსებული'}</small></button>
+    </div>
+    <div class="dash">
+      <div style="display:grid;gap:14px">
+        <div class="section-head" style="margin:0"><h3>Connect გთავაზობს</h3></div>
+        <div class="grid">${sugg.length?sugg.map(m=>sugCard(m,false)).join(''):'<div class="empty">შეთავაზებები ამოიწურა. განაახლე „რა გჭირდებათ“ შენს გვერდზე.</div>'}</div>
+        <div class="panel"><span class="label">ახალი იდეები ჩემს სფეროებში</span><div class="list">${myIdeas.slice(0,4).map(x=>`<div class="li"><div class="grow"><b>${esc(x.i.t)}</b><br><small>${esc(x.o.name)} · ეძებენ: ${esc(x.i.need)}</small></div><button class="btn sm" data-act="connect" data-id="${x.o.id}" data-m="idea">შეერთება</button></div>`).join('')||'<p class="note">ჯერ არცერთი.</p>'}</div></div>
+      </div>
+      <div style="display:grid;gap:14px">
+        <div class="panel"><span class="label">ჩემი კავშირები</span><div class="list">${conn||'<p class="note">ჯერ არცერთი. დაიწყეთ შეთავაზებებიდან.</p>'}</div></div>
+        <div class="panel coffee"><span class="label">ბრმა ყავა</span><p style="color:var(--muted)">30 წუთი უცნობ ორგანიზაციასთან სხვა სფეროდან. შემდეგი: <b>${dlabel(nextThursday())}, 10:00</b>.</p>${blindPanel()}</div>
+        <div class="panel"><span class="label">ჩემი კონტექსტები</span><div class="list">${joined.map(c=>`<div class="li"><div class="grow"><b>${esc(c.name)}</b><br><small><span class="num">${c.members}</span> / 15 ორგანიზაცია</small></div></div>`).join('')||'<p class="note">ჯერ არცერთს არ შეუერთდით.</p>'}</div><div class="acts"><button class="btn sm" data-act="nav" data-v="contexts">კონტექსტები</button></div></div>
+      </div>
+    </div>
+  </section>`;
+}
+function renderHome(){return isOrg()?renderDashboard():isAdmin()?renderAdmin():renderLanding()}
+
+/* ---------- admin panel ---------- */
+function allOrgsForAdmin(){
+  const regs=Object.values(accounts).map(a=>({...a,id:'acc:'+a.email,account:true}));
+  return [...regs,...ORGS];
+}
+function connCount(id){return SEED_CONN.filter(c=>c.from===id||c.to===id).length+PARTNERS.filter(p=>p.includes(id)).length}
+function allConnections(){
+  const rows=PARTNERS.map(([a,b])=>({A:byId(a).name,B:byId(b).name,mode:'partner',state:'აქტიური პარტნიორობა',note:''}));
+  SEED_CONN.forEach(c=>rows.push({A:byId(c.from).name,B:byId(c.to).name,mode:c.mode,state:c.state,note:c.note}));
+  Object.values(accounts).forEach(a=>(a.connections||[]).forEach(c=>{const o=byId(c.id);if(o)rows.push({A:a.name,B:o.name,mode:c.mode,state:'ელოდება პასუხს',note:c.note||''})}));
+  return rows;
+}
+function adminOverview(){
+  const act=ORGS.filter(o=>o.status==='active');
+  const counts=Object.entries(SPH).map(([k,s])=>({k,s,n:act.filter(o=>o.spheres.includes(k)).length}));
+  const max=Math.max(...counts.map(c=>c.n),1);
+  const pend=allOrgsForAdmin().filter(o=>o.status==='pending');
+  return `<div class="dash">
+    <div style="display:grid;gap:14px">
+      <div class="panel"><span class="label">დასადასტურებელი რეგისტრაციები</span><div class="list">${pend.map(o=>`<div class="li"><div class="grow"><b>${esc(o.name)}</b><br><small>${esc(o.type||'')} · ${esc(o.hood||'')}${o.account?' · '+esc(o.email):''}</small></div>${o.account?'':`<button class="btn sm ghost" data-act="open-org" data-id="${o.id}">ნახვა</button>`}<button class="btn sm primary" data-act="org-status" data-id="${o.id}" data-s="active">დადასტურება</button><button class="btn sm" data-act="org-status" data-id="${o.id}" data-s="suspended">უარყოფა</button></div>`).join('')||'<p class="note">ახალი რეგისტრაცია არ არის.</p>'}</div></div>
+      <div class="panel"><span class="label">აქტიური ორგანიზაციები სფეროების მიხედვით</span><div class="bars">${counts.map(c=>`<div class="b" style="--c:${c.s.c}"><span>${c.s.n}</span><div class="t"><i style="width:${c.n/max*100}%"></i></div><span class="num">${c.n}</span></div>`).join('')}</div><p class="note">ერთი ორგანიზაცია შეიძლება რამდენიმე სფეროში იყოს.</p></div>
+    </div>
+    <div class="panel"><span class="label">ბოლო აქტივობა</span><div class="list">${activity.slice(0,8).map(a=>`<div class="li"><div class="grow"><b>${esc(a.who)}</b><br><small>${esc(a.what)}</small></div><small class="num">${esc(a.t)}</small></div>`).join('')}</div><div class="acts"><button class="btn sm" data-act="admin-tab" data-t="log">სრული ჟურნალი</button></div></div>
+  </div>`;
+}
+function adminOrgs(){
+  const q=adminQ.toLowerCase();
+  const rows=allOrgsForAdmin().filter(o=>(adminStatus==='all'||o.status===adminStatus)&&(!q||(o.name+' '+(o.type||'')+' '+(o.hood||'')+' '+(o.email||'')).toLowerCase().includes(q)));
+  const d=o=>{const x=new Date(o.joinedAt);return isNaN(x)?'—':`${x.getDate()} ${MO[x.getMonth()]}`};
+  return `<div style="display:grid;gap:12px">
+    <form id="aform" class="row" style="flex-wrap:wrap"><input type="search" id="a-q" value="${esc(adminQ)}" placeholder="ძებნა სახელით, ტიპით, უბნით ან ელფოსტით" aria-label="ორგანიზაციის ძებნა" style="flex:1 1 260px;width:auto"><div class="seg" role="group" aria-label="სტატუსი">${[['all','ყველა'],['active','აქტიური'],['pending','მოლოდინში'],['suspended','შეჩერებული']].map(([k,n])=>`<button type="button" data-act="admin-st" data-s="${k}" aria-pressed="${adminStatus===k}">${n}</button>`).join('')}</div></form>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>ორგანიზაცია</th><th>სფერო</th><th>უბანი</th><th>რეგისტრაცია</th><th>კავშირები</th><th>სტატუსი</th><th>მოქმედება</th></tr></thead><tbody>
+    ${rows.map(o=>`<tr><td>${o.account?`<b>${esc(o.name)}</b><br><small style="color:var(--muted)">${esc(o.email)} · ანგარიში</small>`:`<button class="link" data-act="open-org" data-id="${o.id}"><b>${esc(o.name)}</b></button><br><small style="color:var(--muted)">${esc(o.type)}</small>`}</td>
+      <td>${chips(o.spheres||[])}</td><td>${esc(o.hood||'')}</td><td class="num">${d(o)}</td><td class="num">${o.account?(o.connections||[]).length:connCount(o.id)}</td><td>${stBadge(o)}</td>
+      <td class="acts">${o.status!=='active'?`<button class="btn sm primary" data-act="org-status" data-id="${o.id}" data-s="active">${o.status==='pending'?'დადასტურება':'აღდგენა'}</button>`:''}${o.status!=='suspended'?`<button class="btn sm" data-act="org-status" data-id="${o.id}" data-s="suspended">შეჩერება</button>`:''}</td></tr>`).join('')||`<tr><td colspan="7" style="color:var(--muted)">ვერაფერი მოიძებნა.</td></tr>`}
+    </tbody></table></div></div>`;
+}
+function adminConnections(){
+  const rows=allConnections();
+  return `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>ვინ</th><th>ვისთან</th><th>ფორმა</th><th>სტატუსი</th><th>დეტალი</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr><td>${esc(r.A)}</td><td>${esc(r.B)}</td><td>${r.mode==='partner'?'პარტნიორობა':MODE_N[r.mode]}</td><td><span class="st ${r.mode==='partner'?'':'info'}">${esc(r.state)}</span></td><td><small style="color:var(--muted)">${esc(r.note)}</small></td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+function adminContent(){
+  const ideas=ORGS.flatMap(o=>o.ideas.map((i,ix)=>({o,i,k:o.id+':'+ix})));
+  return `<div class="split">
+    <div class="panel"><span class="label">იდეის ბარათები · ${ideas.length}</span><div class="list">${ideas.map(x=>`<div class="li"><div class="grow"><b>${esc(x.i.t)}</b><br><small>${esc(x.o.name)} · ეძებენ: ${esc(x.i.need)}</small></div>${hiddenIdeas.has(x.k)?'<span class="st hidden">დამალულია</span>':''}<button class="btn sm" data-act="idea-hide" data-k="${x.k}">${hiddenIdeas.has(x.k)?'გამოჩენა':'დამალვა'}</button></div>`).join('')}</div></div>
+    <div class="panel"><span class="label">კონტექსტები · ${contexts.length}</span><div class="list">${contexts.map(c=>`<div class="li"><div class="grow"><b>${esc(c.name)}</b><br><small>${esc(c.by)} · <span class="num">${c.members}</span> / 15 ორგანიზაცია</small></div>${c.hidden?'<span class="st hidden">დამალულია</span>':''}<button class="btn sm" data-act="ctx-hide" data-id="${c.id}">${c.hidden?'გამოჩენა':'დამალვა'}</button></div>`).join('')}</div></div>
+  </div>`;
+}
+function adminMeetings(){
+  const rows=[...SEED_CONN.filter(c=>c.mode==='coffee').map(c=>({A:byId(c.from).name,B:byId(c.to).name,when:dlabel(nextWorkdays(2)[1])+', 13:00',where:c.note,kind:'ყავაზე დაპატიჟება'})),
+    {A:'სკოლა „ახალი ფურცელი“',B:'სტარტაპი „მეორე სიცოცხლე“',when:dlabel(nextThursday())+', 10:00',where:'Connect Coffee · ვერა',kind:'ბრმა ყავა'},
+    {A:'მუზეუმი „ძველი საათები“',B:'სპორტული კლუბი „ფორმა“',when:dlabel(nextThursday())+', 10:00',where:'Connect Coffee · ავლაბარი',kind:'ბრმა ყავა'}];
+  Object.values(accounts).forEach(a=>(a.connections||[]).filter(c=>c.mode==='coffee'||c.mode==='blind').forEach(c=>{const o=byId(c.id);if(o)rows.push({A:a.name,B:o.name,when:c.note.split(' · ')[0]||'—',where:c.note.split(' · ').slice(1).join(' · ')||'',kind:MODE_N[c.mode]})}));
+  return `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>ორგანიზაციები</th><th>ფორმა</th><th>როდის</th><th>სად</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr><td><b>${esc(r.A)}</b><br><small style="color:var(--muted)">+ ${esc(r.B)}</small></td><td>${esc(r.kind)}</td><td class="num">${esc(r.when)}</td><td>${esc(r.where)}</td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+function adminLog(){
+  return `<div class="panel"><div class="list">${activity.map(a=>`<div class="li"><div class="grow"><b>${esc(a.who)}</b><br><small>${esc(a.what)}</small></div><small class="num">${esc(a.t)}</small></div>`).join('')}</div></div>`;
+}
+function renderAdmin(){
+  const all=allOrgsForAdmin();
+  const tabs=[['overview','მიმოხილვა'],['orgs','ორგანიზაციები'],['conn','კავშირები'],['content','იდეები და კონტექსტები'],['meet','შეხვედრები'],['log','ჟურნალი']];
+  const body={overview:adminOverview,orgs:adminOrgs,conn:adminConnections,content:adminContent,meet:adminMeetings,log:adminLog}[adminTab]();
+  const pend=all.filter(o=>o.status==='pending').length;
+  return `<section style="display:grid;gap:20px">
+    <div class="section-head" style="margin:0"><div style="display:grid;gap:6px"><p class="eyebrow">ადმინისტრატორი</p><h2>ადმინისტრატორის პანელი</h2><p>პლატფორმის სრული სურათი: ორგანიზაციები, კავშირები, იდეები, კონტექსტები და შეხვედრები.</p></div></div>
+    <div class="tiles">
+      <button class="tile" data-act="admin-tab" data-t="orgs"><small>აქტიური ორგანიზაციები</small><b>${all.filter(o=>o.status==='active').length}</b></button>
+      <button class="tile ${pend?'warn':''}" data-act="admin-tab" data-t="overview"><small>დასადასტურებელი</small><b>${pend}</b></button>
+      <button class="tile" data-act="admin-tab" data-t="conn"><small>კავშირები</small><b>${allConnections().length}</b></button>
+      <button class="tile" data-act="admin-tab" data-t="content"><small>ღია იდეები</small><b>${ORGS.reduce((a,o)=>a+o.ideas.length,0)}</b></button>
+      <button class="tile" data-act="admin-tab" data-t="content"><small>კონტექსტები</small><b>${contexts.length}</b></button>
+      <button class="tile" data-act="admin-tab" data-t="meet"><small>დაგეგმილი შეხვედრები</small><b>${SEED_CONN.filter(c=>c.mode==='coffee').length+2}</b></button>
+    </div>
+    <div class="seg admin-tabs" role="tablist" aria-label="პანელის ჩანართები" style="justify-self:start">${tabs.map(([k,n])=>`<button role="tab" data-act="admin-tab" data-t="${k}" aria-pressed="${adminTab===k}" aria-selected="${adminTab===k}">${n}</button>`).join('')}</div>
+    ${body}
+  </section>`;
+}
+
 function blindResult(){
   const o=byId(blind.id),m=match(me,o);
   return `<div class="idea" style="background:var(--surface)"><span class="label">შენი წყვილი</span><strong>${esc(o.name)}</strong><p>${chips(o.spheres)} · ${esc(o.hood)}</p><p>სასაუბრო თემა: <b>${esc(m.idea.t)}</b></p><p>${dlabel(nextThursday())}, 10:00 · Connect Coffee · ვერა</p></div>
@@ -603,9 +891,9 @@ function renderFeed(){
   let list=ORGS.filter(passes);
   const body = feedMode==='orgs'
     ? list.map(o=>orgCard(o)).join('')
-    : list.flatMap(o=>o.ideas.map(i=>ideaCard(o,i))).join('');
+    : list.flatMap(o=>o.ideas.map((i,ix)=>ideaOn(o,ix)?ideaCard(o,i):'')).join('');
   return `<section>
-    <div class="section-head"><div style="display:grid;gap:6px"><h2>საერთო სივრცე</h2><p>ყველა ორგანიზაცია და ღია იდეა ერთ სივრცეში.</p><div class="row" style="gap:8px;font-size:.85rem"><span class="tag have">მწვანე — შეთავაზება</span><span class="tag need">ყვითელი — საჭიროება</span><span class="tag hit">ლურჯი — დამთხვევა მომხმარებლის გვერდთან</span></div></div>
+    <div class="section-head"><div style="display:grid;gap:6px"><h2>საერთო სივრცე</h2><p>ყველა ორგანიზაცია და ღია იდეა ერთ სივრცეში.</p><div class="row" style="gap:8px;font-size:.85rem"><span class="tag have">მწვანე — შეთავაზება</span><span class="tag need">ყვითელი — საჭიროება</span>${isOrg()?'<span class="tag hit">ლურჯი — დამთხვევა თქვენს გვერდთან</span>':''}</div></div>
       <div class="seg" role="group" aria-label="რას ვაჩვენოთ"><button data-act="feed-mode" data-m="orgs" aria-pressed="${feedMode==='orgs'}">ორგანიზაციები</button><button data-act="feed-mode" data-m="ideas" aria-pressed="${feedMode==='ideas'}">იდეები</button></div></div>
     ${sphereFilters()}
     <div class="grid" style="margin-top:18px">${body||'<div class="empty">ამ სფეროში ჯერ არავინაა. შექმენი კონტექსტი და მოიწვიე პირველები.</div>'}</div>
@@ -613,28 +901,29 @@ function renderFeed(){
 }
 
 function renderMap(){
-  const near=ORGS.filter(passes).map(o=>({o,d:dist(me,o)})).filter(x=>radius===99||x.d<=radius).sort((a,b)=>a.d-b.d);
+  const own=isOrg(), C=own?me:{x:480,y:320}, rad=own?radius:99;
+  const near=ORGS.filter(passes).map(o=>({o,d:dist(C,o)})).filter(x=>rad===99||x.d<=rad).sort((a,b)=>own?a.d-b.d:a.o.name.localeCompare(b.o.name,'ka'));
   const nearIds=new Set(near.map(x=>x.o.id));
   const river='M150 0 C230 110 360 170 460 250 S600 360 650 470 S760 590 840 640';
   const pins=ORGS.filter(passes).map(o=>{const on=nearIds.has(o.id);return `<g class="pin" tabindex="0" role="button" aria-label="${esc(o.name)}" data-act="open-org" data-id="${o.id}" opacity="${on?1:.35}">
       <circle class="dot" cx="${o.x}" cy="${o.y}" r="13" fill="${SPH[o.spheres[0]].c}" stroke="var(--surface)" stroke-width="3"/>
       ${o.spheres[1]?`<circle cx="${o.x+8}" cy="${o.y-8}" r="4.5" fill="${SPH[o.spheres[1]].c}" stroke="var(--surface)" stroke-width="1.5"/>`:''}
       ${on?`<text x="${o.x}" y="${o.y+32}" text-anchor="middle" font-size="17" font-weight="600" fill="var(--ink)" font-family="var(--f-body)" paint-order="stroke" stroke="var(--surface)" stroke-width="4">${esc(o.name.replace(/^.*?„/,'„'))}</text>`:''}</g>`}).join('');
-  const r=radius===99?0:radius*100;
+  const r=rad===99?0:rad*100;
   return `<section>
-    <div class="section-head"><div style="display:grid;gap:6px"><h2>რუკა</h2><p>ვინ არის თქვენ ახლოს.</p><div class="legend" role="list" aria-label="რუკის ლეგენდა">
+    <div class="section-head"><div style="display:grid;gap:6px"><h2>რუკა</h2><p>${own?'ვინ არის თქვენ ახლოს.':'ქალაქის ორგანიზაციები ერთ რუკაზე. შედით, რომ ნახოთ, ვინ არის თქვენ ახლოს.'}</p><div class="legend" role="list" aria-label="რუკის ლეგენდა">
   <span class="lg" role="listitem"><svg width="22" height="16" viewBox="0 0 22 16"><circle cx="11" cy="8" r="6" fill="var(--s-edu)" stroke="var(--surface)" stroke-width="2"/></svg>ორგანიზაცია <small>ფერი — სფერო</small></span>
-  <span class="lg" role="listitem"><svg width="22" height="16" viewBox="0 0 22 16"><circle cx="11" cy="8" r="7.5" fill="var(--blue)" fill-opacity=".2"/><circle cx="11" cy="8" r="4.5" fill="var(--blue)" stroke="var(--surface)" stroke-width="1.5"/></svg>თქვენ</span>
-  <span class="lg" role="listitem"><svg width="22" height="16" viewBox="0 0 22 16"><circle cx="11" cy="8" r="7" fill="var(--blue)" fill-opacity=".08" stroke="var(--blue)" stroke-dasharray="3 2"/></svg>არჩეული რადიუსი</span>
+  ${own?`<span class="lg" role="listitem"><svg width="22" height="16" viewBox="0 0 22 16"><circle cx="11" cy="8" r="7.5" fill="var(--blue)" fill-opacity=".2"/><circle cx="11" cy="8" r="4.5" fill="var(--blue)" stroke="var(--surface)" stroke-width="1.5"/></svg>თქვენ</span>
+  <span class="lg" role="listitem"><svg width="22" height="16" viewBox="0 0 22 16"><circle cx="11" cy="8" r="7" fill="var(--blue)" fill-opacity=".08" stroke="var(--blue)" stroke-dasharray="3 2"/></svg>არჩეული რადიუსი</span>`:''}
   <span class="lg" role="listitem"><svg width="26" height="16" viewBox="0 0 26 16"><line x1="2" y1="8" x2="24" y2="8" stroke="var(--green)" stroke-width="2.5" stroke-dasharray="4 3"/></svg>არსებული პარტნიორობა</span>
-  <span class="lg" role="listitem"><svg width="26" height="16" viewBox="0 0 26 16"><line x1="2" y1="8" x2="24" y2="8" stroke="var(--primary)" stroke-width="2.5"/></svg>თქვენი კავშირი</span>
+  ${own?`<span class="lg" role="listitem"><svg width="26" height="16" viewBox="0 0 26 16"><line x1="2" y1="8" x2="24" y2="8" stroke="var(--primary)" stroke-width="2.5"/></svg>თქვენი კავშირი</span>`:''}
   <span class="lg" role="listitem"><svg width="22" height="16" viewBox="0 0 22 16"><path d="M11 2 l6 6 l-6 6 l-6 -6 z" fill="var(--orange)"/></svg>ფარული რესურსი</span>
   <span class="lg" role="listitem"><svg width="22" height="16" viewBox="0 0 22 16"><circle cx="11" cy="8" r="7" fill="var(--surface)" stroke="var(--coffee)" stroke-width="1.5"/><path d="M8 5 h6 l-.8 5.5 h-4.4 z" fill="var(--coffee)"/></svg>Connect Coffee — შეხვედრის ადგილი</span>
 </div></div></div>
     <div class="map-wrap">
       <div class="map-box">
         <div class="map-tools">
-          <div class="seg" role="group" aria-label="რადიუსი">${[[1,'1 კმ'],[2,'2 კმ'],[4,'4 კმ'],[99,'ქალაქი']].map(([v,n])=>`<button data-act="radius" data-r="${v}" aria-pressed="${radius===v}">${n}</button>`).join('')}</div>
+          ${own?'':'<!--'}<div class="seg" role="group" aria-label="რადიუსი">${[[1,'1 კმ'],[2,'2 კმ'],[4,'4 კმ'],[99,'ქალაქი']].map(([v,n])=>`<button data-act="radius" data-r="${v}" aria-pressed="${radius===v}">${n}</button>`).join('')}</div>${own?'':'-->'}
           <div class="layers">
             <label><input type="checkbox" id="ly-partners" data-act="layer" data-l="partners" ${layers.partners?'checked':''}> პარტნიორობები</label>
             <label><input type="checkbox" id="ly-hidden" data-act="layer" data-l="hidden" ${layers.hidden?'checked':''}> ფარული რესურსები</label>
@@ -649,20 +938,20 @@ function renderMap(){
           ${Object.entries(HOODS).map(([n,[x,y]])=>`<text x="${x}" y="${y-22}" text-anchor="middle" font-size="16" letter-spacing=".06em" fill="var(--muted)" opacity=".7" font-family="var(--f-body)">${n.toUpperCase()}</text>`).join('')}
           ${r?`<circle cx="${me.x}" cy="${me.y}" r="${r}" fill="var(--blue)" fill-opacity=".07" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="6 6"/>`:''}
           ${layers.partners?PARTNERS.map(([a,b])=>{const A=byId(a),B=byId(b);return `<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="var(--green)" stroke-width="2.5" stroke-dasharray="5 5"/>`}).join(''):''}
-          ${connections.map(c=>{const B=byId(c.id);return `<line x1="${me.x}" y1="${me.y}" x2="${B.x}" y2="${B.y}" stroke="var(--primary)" stroke-width="2.5"/>`}).join('')}
+          ${(own?connections:[]).map(c=>{const B=byId(c.id);return `<line x1="${me.x}" y1="${me.y}" x2="${B.x}" y2="${B.y}" stroke="var(--primary)" stroke-width="2.5"/>`}).join('')}
           ${layers.coffee?COFFEES.map(c=>`<g><circle cx="${c.x}" cy="${c.y}" r="15" fill="var(--surface)" stroke="var(--coffee)" stroke-width="2"/><path d="M${c.x-6} ${c.y-5} h12 l-1.5 10 h-9 z" fill="var(--coffee)"/><title>${c.name}</title></g>`).join(''):''}
           ${pins}
           ${layers.hidden?ORGS.filter(o=>o.hidden&&passes(o)).map(o=>`<path d="M${o.x-14} ${o.y+2} l6 -6 l6 6 l-6 6 z" fill="var(--orange)" stroke="var(--surface)" stroke-width="1.5" transform="translate(-6 -16)"><title>${esc(o.hidden)}</title></path>`).join(''):''}
-          <g data-act="nav" data-v="profile" class="pin" role="button" tabindex="0" aria-label="ჩემი ორგანიზაცია">
+          ${own?`<g data-act="nav" data-v="profile" class="pin" role="button" tabindex="0" aria-label="ჩემი ორგანიზაცია">
             <circle cx="${me.x}" cy="${me.y}" r="17" fill="var(--blue)" fill-opacity=".18"/>
             <circle cx="${me.x}" cy="${me.y}" r="9" fill="var(--blue)" stroke="var(--surface)" stroke-width="3"/>
-            <text x="${me.x}" y="${me.y-22}" text-anchor="middle" font-size="17" font-weight="700" fill="var(--blue)" font-family="var(--f-body)" paint-order="stroke" stroke="var(--surface)" stroke-width="4">თქვენ</text></g>
+            <text x="${me.x}" y="${me.y-22}" text-anchor="middle" font-size="17" font-weight="700" fill="var(--blue)" font-family="var(--f-body)" paint-order="stroke" stroke="var(--surface)" stroke-width="4">თქვენ</text></g>`:''}
         </svg>
       </div>
       <aside class="side" aria-label="ახლოს მყოფი ორგანიზაციები">
         ${sphereFilters()}
-        <span class="label" style="margin-top:6px">${radius===99?'მთელ ქალაქში':radius+' კმ-ის რადიუსში'} · <span class="num">${near.length}</span></span>
-        ${near.length?near.map(({o,d})=>`<button class="near" data-act="open-org" data-id="${o.id}" style="--c:${SPH[o.spheres[0]].c}"><span class="dot"></span><div><b>${esc(o.name)}</b><br><small>${esc(o.type)} · ${esc(o.hood)}</small></div><span class="d">${km(d)}</span></button>`).join('')
+        <span class="label" style="margin-top:6px">${rad===99?'მთელ ქალაქში':rad+' კმ-ის რადიუსში'} · <span class="num">${near.length}</span></span>
+        ${near.length?near.map(({o,d})=>`<button class="near" data-act="open-org" data-id="${o.id}" style="--c:${SPH[o.spheres[0]].c}"><span class="dot"></span><div><b>${esc(o.name)}</b><br><small>${esc(o.type)} · ${esc(o.hood)}</small></div>${own?`<span class="d">${km(d)}</span>`:''}</button>`).join('')
           :'<div class="empty">ამ რადიუსში არავინაა. გაზარდე რადიუსი.</div>'}
       </aside>
     </div>
@@ -716,22 +1005,23 @@ function renderContexts(){
   return `<section>
     <div class="section-head"><div style="display:grid;gap:6px"><h2>კონტექსტები</h2><p>თუ შენი იდეა არცერთ სფეროს არ ერგება, შექმენი კონტექსტი — თემა ან გამოწვევა, რომელზეც სხვებს იწვევ. როცა 15 ორგანიზაცია შეუერთდება, კონტექსტი ახალ ქვესფეროდ იქცევა.</p></div></div>
     <div class="grid">
-      ${contexts.map(c=>`<article class="card">
+      ${contexts.filter(c=>isAdmin()||!c.hidden).map(c=>`<article class="card">
         <span class="label">${esc(c.hood)}</span><h3>${esc(c.name)}</h3>
         <div class="sub">${chips(c.spheres)}</div>
         <p class="desc">${esc(c.desc)}</p>
         <div style="display:grid;gap:6px"><div class="bar-prog"><i style="width:${Math.min(100,c.members/15*100)}%"></i></div>
           <small style="color:var(--muted)"><span class="num">${c.members}</span> / 15 ორგანიზაცია ${c.members>=15?'· ახალი ქვესფერო':''}</small></div>
         <small style="color:var(--muted)">შექმნა: ${esc(c.by)}</small>
-        <div class="acts"><button class="btn sm ${c.joined?'':'primary'}" data-act="join" data-id="${c.id}">${c.joined?'დატოვება':'შეუერთდი'}</button></div>
+        ${isAdmin()?`<div class="acts">${c.hidden?'<span class="st hidden">დამალულია</span>':'<span class="st">ხილული</span>'}<button class="btn sm" data-act="ctx-hide" data-id="${c.id}">${c.hidden?'გამოჩენა':'დამალვა'}</button></div>`
+          :`<div class="acts"><button class="btn sm ${c.joined?'':'primary'}" data-act="join" data-id="${c.id}">${c.joined?'დატოვება':'შეუერთდი'}</button></div>`}
       </article>`).join('')}
-      <form class="card" id="cform" style="background:var(--sunk)">
+      ${isAdmin()?'':!isOrg()?`<div class="card" style="background:var(--sunk)"><span class="label">შექმენი შენი კონტექსტი</span><p class="desc">კონტექსტის შესაქმნელად და შესაერთებლად შედით ორგანიზაციის ანგარიშით.</p><div class="acts"><button class="btn sm primary" data-act="login">შესვლა</button></div></div>`:`<form class="card" id="cform" style="background:var(--sunk)">
         <span class="label">შექმენი შენი კონტექსტი</span>
         <label class="f">სახელი<input type="text" id="c-name" required placeholder="მაგ.: საბავშვო წიგნის კვირეული ვაკეში"></label>
         <label class="f">რას ეძებ და ვის იწვევ<textarea id="c-desc" placeholder="მოკლედ: რა გინდა შექმნათ და ვინ გჭირდებათ"></textarea></label>
         <div class="toggles have" id="c-sph">${Object.entries(SPH).map(([k,s])=>`<button type="button" data-act="ctx-sph" data-k="${k}" aria-pressed="false">${s.n}</button>`).join('')}</div>
         <button class="btn primary" type="submit">კონტექსტის გამოქვეყნება</button>
-      </form>
+      </form>`}
     </div>
   </section>`;
 }
@@ -789,9 +1079,10 @@ function drawModal(){
   const L=$('#layer');
   if(!modal){L.innerHTML='';document.body.style.overflow='';return}
   document.body.style.overflow='hidden';
-  const o=byId(modal.id);
+  const o=modal.id?byId(modal.id):null;
   let title,body;
-  if(modal.kind==='org'){title=o.name;body=visionPage(o,false)}
+  if(modal.kind==='login'){title='შესვლა Connect-ში';body=authBox()}
+  else if(modal.kind==='org'){title=o.name;body=visionPage(o,false)}
   else{
     title='დაკავშირება: '+o.name;
     const tabs=[['letter','მიწერა'],['coffee','ყავაზე დაპატიჟება'],['idea','იდეაზე შეერთება']];
@@ -805,18 +1096,43 @@ function drawModal(){
       <div class="row"><button class="btn primary" data-act="send">${modal.mode==='coffee'?'დაპატიჟება':modal.mode==='idea'?'მოთხოვნის გაგზავნა':'გაგზავნა'}</button><button class="btn ghost" data-act="close">გაუქმება</button></div>`;
   }
   L.innerHTML=`<div class="overlay" data-act="close-bg"><div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="modal-head"><h3>${esc(title)}</h3><button class="x" data-act="close" aria-label="დახურვა">×</button></div><div class="modal-body">${body}</div></div></div>`;
-  L.querySelector('.modal .x').focus();
+  const f=L.querySelector('.modal input[type=email]');(f||L.querySelector('.modal .x')).focus();
 }
 let toastT;
 function toast(t){let el=$('.toast');if(!el){el=document.createElement('div');el.className='toast';el.setAttribute('role','status');document.body.appendChild(el)}el.textContent=t;clearTimeout(toastT);toastT=setTimeout(()=>el.remove(),2600)}
 
+/* ---------- accounts ---------- */
+function persistMe(){me.connections=connections;accounts[me.email]=me;save('connect-accounts',accounts)}
+function askLogin(msg){if(isAdmin()){toast('ადმინისტრატორი ორგანიზაციის სახელით ვერ მოქმედებს');return}authTab='login';modal={kind:'login'};drawModal();if(msg)toast(msg)}
+const needOrg=()=>{if(isOrg())return true;askLogin('ამისთვის შედით ორგანიზაციის ანგარიშით');return false};
+function doLogin(role,email){
+  session={role,email};save('connect-session',session);
+  dismissed.clear();blind=null;modal=null;drawModal();
+  if(role==='org'){me=accounts[email];connections=me.connections||[];logAct(me.name,'შევიდა სისტემაში');go('home');toast('გამარჯობა, '+me.name)}
+  else{logAct('ადმინისტრატორი','შევიდა სისტემაში');go('admin');toast('შეხვედით ადმინისტრატორის სახით')}
+}
+function doLogout(){
+  logAct(isAdmin()?'ადმინისტრატორი':me.name,'გავიდა სისტემიდან');
+  if(isOrg())persistMe();
+  session=null;try{localStorage.removeItem('connect-session')}catch(e){}
+  me=JSON.parse(JSON.stringify(DEFAULT_ME));connections=[];dismissed.clear();blind=null;draft=null;authTab='login';
+  modal=null;drawModal();go('home');toast('გამოხვედით სისტემიდან');
+}
+function setStatus(id,st){
+  let name;
+  if(id.startsWith('acc:')){const a=accounts[id.slice(4)];if(!a)return;a.status=st;name=a.name;if(me.email===a.email)me.status=st;save('connect-accounts',accounts)}
+  else{const o=byId(id);o.status=st;name=o.name;saveAdmin()}
+  logAct('ადმინისტრატორი',`${name} — ${ST_N[st]}`);render();toast(`${name}: ${ST_N[st]}`);
+}
+
 /* ---------- render + events ---------- */
 function render(){
   renderNav();
-  const v={home:renderHome,feed:renderFeed,map:renderMap,match:renderMatch,search:renderSearch,contexts:renderContexts,profile:renderProfile}[view]||renderHome;
+  if(!views().some(([v])=>v===view)) view=isAdmin()?'admin':'home';
+  const v={home:renderHome,about:renderAbout,admin:renderAdmin,feed:renderFeed,map:renderMap,match:renderMatch,search:renderSearch,contexts:renderContexts,profile:renderProfile}[view]||renderHome;
   $('#view').innerHTML=v();
 }
-function go(v){view=v;if(v!=='profile')draft=null;try{history.replaceState(null,'','#'+v)}catch(e){}render();window.scrollTo({top:0,behavior:'instant'})}
+function go(v){if(v==='home'&&isAdmin())v='admin';if((v==='match'||v==='profile')&&!isOrg()){askLogin();return}view=v;if(v!=='profile')draft=null;try{history.replaceState(null,'','#'+v)}catch(e){}render();window.scrollTo({top:0,behavior:'instant'})}
 
 document.addEventListener('click',e=>{
   const el=e.target.closest('[data-act]');if(!el)return;
@@ -824,13 +1140,24 @@ document.addEventListener('click',e=>{
   if(a==='close-bg'&&e.target!==el)return;
   if(el.tagName==='INPUT')return; // checkboxes handled on change
   switch(a){
-    case 'nav':modal=null;drawModal();go(el.dataset.v);break;
+    case 'nav':if((el.dataset.v==='match'||el.dataset.v==='profile')&&!isOrg()){askLogin();break}modal=null;drawModal();go(el.dataset.v);break;
+    case 'login':askLogin();break;
+    case 'register':if(isOrg()){go('profile');break}authTab='register';if(view==='home'&&!session){modal=null;drawModal();render();$('#r-name')?.focus()}else{modal={kind:'login'};drawModal()}break;
+    case 'auth-tab':authTab=el.dataset.t;if(modal)drawModal();else render();break;
+    case 'demo-login':doLogin(el.dataset.r,el.dataset.r==='admin'?ADMIN_EMAIL:DEFAULT_ME.email);break;
+    case 'logout':doLogout();break;
+    case 'admin-tab':adminTab=el.dataset.t;render();break;
+    case 'admin-st':adminStatus=el.dataset.s;render();break;
+    case 'org-status':setStatus(el.dataset.id,el.dataset.s);break;
+    case 'admin-org':adminTab='orgs';adminStatus='all';adminQ=byId(el.dataset.id).name;modal=null;drawModal();go('admin');break;
+    case 'idea-hide':{const k=el.dataset.k;hiddenIdeas.has(k)?hiddenIdeas.delete(k):hiddenIdeas.add(k);saveAdmin();logAct('ადმინისტრატორი',(hiddenIdeas.has(k)?'დამალა':'გამოაჩინა')+' იდეის ბარათი');render();break}
+    case 'ctx-hide':{const c=contexts.find(x=>x.id===el.dataset.id);c.hidden=!c.hidden;saveAdmin();logAct('ადმინისტრატორი',(c.hidden?'დამალა':'გამოაჩინა')+' კონტექსტი „'+c.name+'“');render();break}
     case 'sph':{const k=el.dataset.k;sphereFilter.has(k)?sphereFilter.delete(k):sphereFilter.add(k);render();break}
     case 'sph-clear':sphereFilter.clear();render();break;
     case 'feed-mode':feedMode=el.dataset.m;render();break;
     case 'radius':radius=+el.dataset.r;render();break;
     case 'open-org':openOrg(el.dataset.id);break;
-    case 'connect':openConnect(el.dataset.id,el.dataset.m);break;
+    case 'connect':if(!needOrg())break;openConnect(el.dataset.id,el.dataset.m);break;
     case 'cmode':modal.mode=el.dataset.m;drawModal();break;
     case 'slot':modal.slot=el.dataset.k;drawModal();break;
     case 'close':case 'close-bg':modal=null;drawModal();break;
@@ -838,7 +1165,7 @@ document.addEventListener('click',e=>{
       const o=byId(modal.id);let note='';
       if(modal.mode==='coffee'){if(!modal.slot){toast('აირჩიე შეხვედრის დრო');return}note=modal.slot+' · '+($('#m-place')?.value||'')}
       if(modal.mode==='idea'){const r=document.querySelector('input[name="m-idea"]:checked');note='„'+o.ideas[r?+r.value:0].t+'“'}
-      connections=connections.filter(c=>c.id!==o.id);connections.push({id:o.id,mode:modal.mode,note});
+      connections=connections.filter(c=>c.id!==o.id);connections.push({id:o.id,mode:modal.mode,note});persistMe();logAct(me.name,MODE_N[modal.mode]+' → '+o.name);
       modal=null;drawModal();render();
       toast(`გაიგზავნა: ${o.name} — პასუხს „შენს გვერდზე“ ნახავ`);break}
     case 'scan':if(scanning)return;scanning=true;render();setTimeout(()=>{scanning=false;scanned=true;phoneTab='idea';render()},900);break;
@@ -846,16 +1173,16 @@ document.addEventListener('click',e=>{
     case 'cafe':cafeIdx=+el.dataset.i;scanned=false;render();break;
     case 'ptab':phoneTab=el.dataset.k;render();break;
     case 'wave':{const o=byId(el.dataset.id);connections=connections.filter(c=>c.id!==o.id);connections.push({id:o.id,mode:'coffee',note:'აქვე, მაგიდა '+el.dataset.t+' · '+CAFES[cafeIdx].name});toast(`${o.name} მიიღებს შეტყობინებას: მაგიდა 6-დან გესალმებიან`);break}
-    case 'dismiss':dismissed.add(el.dataset.id);render();break;
+    case 'dismiss':if(!needOrg())break;dismissed.add(el.dataset.id);render();break;
     case 'undismiss':dismissed.clear();render();break;
-    case 'blind':{const pool=ranked().filter(m=>!m.o.spheres.some(s=>me.spheres.includes(s))).slice(0,6);const pick=pool[Math.floor(Math.random()*pool.length)]||ranked()[0];blind={id:pick.o.id};render();break}
-    case 'blind-ok':connections=connections.filter(c=>c.id!==blind.id);connections.push({id:blind.id,mode:'blind',note:dlabel(nextThursday())+', 10:00 · Connect Coffee · ვერა'});toast('ბრმა ყავა დაჯავშნილია');blind=null;render();break;
+    case 'blind':{if(!needOrg())break;const pool=ranked().filter(m=>!m.o.spheres.some(s=>me.spheres.includes(s))).slice(0,6);const pick=pool[Math.floor(Math.random()*pool.length)]||ranked()[0];blind={id:pick.o.id};render();break}
+    case 'blind-ok':connections=connections.filter(c=>c.id!==blind.id);connections.push({id:blind.id,mode:'blind',note:dlabel(nextThursday())+', 10:00 · Connect Coffee · ვერა'});persistMe();logAct(me.name,'დაჯავშნა ბრმა ყავა');toast('ბრმა ყავა დაჯავშნილია');blind=null;render();break;
     case 'ex':query=el.dataset.q;render();break;
-    case 'join':{const c=contexts.find(x=>x.id===el.dataset.id);c.joined=!c.joined;c.members+=c.joined?1:-1;render();if(c.joined)toast('შეუერთდი: '+c.name);break}
+    case 'join':{if(!needOrg())break;const c=contexts.find(x=>x.id===el.dataset.id);c.joined=!c.joined;c.members+=c.joined?1:-1;render();if(c.joined)toast('შეუერთდი: '+c.name);break}
     case 'ctx-sph':el.setAttribute('aria-pressed',el.getAttribute('aria-pressed')!=='true');break;
     case 'p-sph':{const k=el.dataset.k;draft.spheres=draft.spheres.includes(k)?draft.spheres.filter(x=>x!==k):[...draft.spheres,k];if(!draft.spheres.length)draft.spheres=[k];el.setAttribute('aria-pressed',draft.spheres.includes(k));refreshPreview();break}
     case 'p-tag':{const w=el.dataset.w,t=el.dataset.t;draft[w]=draft[w].includes(t)?draft[w].filter(x=>x!==t):[...draft[w],t];el.setAttribute('aria-pressed',draft[w].includes(t));refreshPreview();break}
-    case 'p-reset':draft=JSON.parse(JSON.stringify(DEFAULT_ME));render();break;
+    case 'p-reset':draft={...JSON.parse(JSON.stringify(DEFAULT_ME)),email:me.email,status:me.status,joinedAt:me.joinedAt};render();break;
   }
 });
 document.addEventListener('change',e=>{
@@ -874,10 +1201,30 @@ document.addEventListener('input',e=>{
 document.addEventListener('submit',e=>{
   e.preventDefault();
   if(e.target.id==='sform'){query=$('#q').value.trim();render()}
-  if(e.target.id==='pform'){me=JSON.parse(JSON.stringify(draft));if(!me.hidden)delete me.hidden;save('connect-me',me);dismissed.clear();toast('გვერდი შენახულია — შეთავაზებები განახლდა');go('match')}
+  if(e.target.id==='aform'){adminQ=$('#a-q').value.trim();render()}
+  if(e.target.id==='lform'){
+    const email=$('#l-email').value.trim().toLowerCase(),pass=$('#l-pass').value;
+    if(!email||!pass){toast('შეიყვანეთ ელფოსტა და პაროლი');return}
+    if(email===ADMIN_EMAIL)doLogin('admin',email);
+    else if(accounts[email])doLogin('org',email);
+    else toast('ასეთი ანგარიში ვერ მოიძებნა — დარეგისტრირდით ან სცადეთ სადემონსტრაციო შესვლა');
+  }
+  if(e.target.id==='rform'){
+    const name=$('#r-name').value.trim(),email=$('#r-email').value.trim().toLowerCase(),pass=$('#r-pass').value;
+    if(!name||!email||!pass){toast('შეავსეთ სახელი, ელფოსტა და პაროლი');return}
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){toast('ელფოსტა არასწორია');return}
+    if(accounts[email]||email===ADMIN_EMAIL){toast('ეს ელფოსტა უკვე რეგისტრირებულია — შედით');authTab='login';modal?drawModal():render();return}
+    const [x,y]=HOODS['ვაკე'];
+    accounts[email]={id:'me',name,type:$('#r-type').value.trim()||'ორგანიზაცია',spheres:['life'],hood:'ვაკე',x:x+18,y:y+16,does:'',vision:'',haves:[],needs:[],ideas:[],formats:[],email,status:'pending',joinedAt:new Date().toISOString().slice(0,10),connections:[]};
+    save('connect-accounts',accounts);logAct(name,'დარეგისტრირდა — ელოდება დადასტურებას');
+    session={role:'org',email};save('connect-session',session);me=accounts[email];connections=[];dismissed.clear();modal=null;drawModal();
+    go('profile');toast('ანგარიში შეიქმნა — შეავსეთ ორგანიზაციის გვერდი');
+  }
+  if(e.target.id==='pform'){me=JSON.parse(JSON.stringify(draft));if(!me.hidden)delete me.hidden;persistMe();logAct(me.name,'განაახლა ორგანიზაციის გვერდი');dismissed.clear();toast('გვერდი შენახულია — შეთავაზებები განახლდა');go('match')}
   if(e.target.id==='cform'){
     const name=$('#c-name').value.trim();if(!name){toast('დაწერე კონტექსტის სახელი');return}
     const sp=[...document.querySelectorAll('#c-sph [aria-pressed="true"]')].map(b=>b.dataset.k);
+    logAct(me.name,'შექმნა კონტექსტი „'+name+'“');
     contexts.unshift({id:'c'+Date.now(),name,hood:me.hood,desc:$('#c-desc').value.trim()||'ახალი კონტექსტი — შემოუერთდით და ერთად განვავითაროთ.',spheres:sp.length?sp:me.spheres,members:1,joined:true,by:me.name});
     render();toast('კონტექსტი გამოქვეყნდა');
   }
@@ -888,8 +1235,10 @@ document.addEventListener('keydown',e=>{
 });
 function refreshPreview(){const p=$('#preview');if(p)p.innerHTML=visionPage(draft,true)}
 
+if(session&&session.role==='org'&&!accounts[session.email])session=null;
+if(isOrg())connections=me.connections||[];
 const start=(location.hash||'').slice(1);
-if(VIEWS.some(([v])=>v===start))view=start;
+view=views().some(([v])=>v===start)?start:(isAdmin()?'admin':'home');
 render();
 </script>
 
